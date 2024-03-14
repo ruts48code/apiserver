@@ -54,6 +54,8 @@ github.com/ruts48code/random4ruts v0.0.0-20240313083834-115f46b90008 h1:1onihqkM
 github.com/ruts48code/random4ruts v0.0.0-20240313083834-115f46b90008/go.mod h1:6D/Vr/ytkNgvU7HVu1/+tQtpDXJvdMXxuiDTiTqtJ7o=
 github.com/ruts48code/utils4ruts v0.0.0-20240314014233-39307c7fbdae h1:6Lrez3eDylySxFCA4DjehbjWmCwLZnqKOm7URr2V09E=
 github.com/ruts48code/utils4ruts v0.0.0-20240314014233-39307c7fbdae/go.mod h1:swdmlNzFYUvDVuHwqXQM5ojA1vF/5OIv4AsulD6qDTY=
+github.com/ruts48code/utils4ruts v0.0.0-20240314074217-41b4c4c6b930 h1:o7xgKoeqZ0DKsFI1CGHIEAGRA3RlR+EEk1FxFQAtTvc=
+github.com/ruts48code/utils4ruts v0.0.0-20240314074217-41b4c4c6b930/go.mod h1:iCMzNjAlSb8moySfBJv46DaZKOL5L6TC3b8FqrFmawc=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=

@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html/v2"
+	utils "github.com/ruts48code/utils4ruts"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 )
 
 func main() {
-	processConfig()
+	utils.ProcessConfig("/etc/apiserver.yml", &conf)
 	app := fiber.New(fiber.Config{
 		Views:          html.New("./template", ".html"),
 		ProxyHeader:    fiber.HeaderXForwardedFor,

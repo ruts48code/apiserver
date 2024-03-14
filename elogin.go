@@ -10,7 +10,7 @@ import (
 	_ "github.com/lib/pq"
 	crypt "github.com/ruts48code/crypt4ruts"
 	random "github.com/ruts48code/random4ruts"
-	util "github.com/ruts48code/utils4ruts"
+	utils "github.com/ruts48code/utils4ruts"
 )
 
 type (
@@ -72,7 +72,7 @@ func eloginToken(ctx *fiber.Ctx) error {
 }
 
 func eloginDelete(ctx *fiber.Ctx) error {
-	username := util.NormalizeUsername(ctx.Params("username"))
+	username := utils.NormalizeUsername(ctx.Params("username"))
 	DeleteLoginDatabase(username)
 	return ctx.SendString("ok")
 }
@@ -86,8 +86,8 @@ func elogin(ctx *fiber.Ctx) error {
 		})
 	}
 
-	username := util.MakeString(util.NormalizeUsername(data.Username))
-	password := util.MakeString(data.Password)
+	username := utils.MakeString(utils.NormalizeUsername(data.Username))
+	password := utils.MakeString(data.Password)
 
 	if username == "" || password == "" {
 		return ctx.JSON(UserStruct{
@@ -119,7 +119,7 @@ func elogin(ctx *fiber.Ctx) error {
 }
 
 func ChkToken(tokenx string) (output UserStruct) {
-	token := util.NormalizedEloginToken(tokenx)
+	token := utils.NormalizedEloginToken(tokenx)
 	db, err := getDBS()
 	if err != nil {
 		log.Printf("Error: Check token database for %s - %v\n", token, err)
@@ -128,7 +128,7 @@ func ChkToken(tokenx string) (output UserStruct) {
 	}
 	defer db.Close()
 
-	ts := util.GetTimeStamp(time.Now())
+	ts := utils.GetTimeStamp(time.Now())
 	qstring := ""
 	switch conf.DBType {
 	case "postgres":
@@ -161,7 +161,7 @@ func ChkToken(tokenx string) (output UserStruct) {
 		rows.Scan(&output.Name, &output.FirstName, &output.LastName, &output.Username, &output.FacCode, &output.FacName, &output.DepCode, &output.DepName, &output.SecCode, &output.SecName, &output.Email, &output.CID, &output.ChiefCode, &output.ChiefName, &output.ChiefFacCode, &output.ChiefFacName)
 		output.Status = "ok"
 		output.Token = token
-		output.Type = util.CheckEpassportType(output.Username)
+		output.Type = utils.CheckEpassportType(output.Username)
 		break
 	}
 	if output.Status == "" {
@@ -240,7 +240,7 @@ func getDataStaff(username string) (output UserStruct) {
 		output.Status = "ok"
 		output.Username = username
 		output.Name = output.FirstName + " " + output.LastName
-		output.Type = util.CheckEpassportType(username)
+		output.Type = utils.CheckEpassportType(username)
 		output.Email = username + "@rmutsv.ac.th"
 		break
 	}
@@ -267,7 +267,7 @@ func ChkLoginLDAP(username string, password string) (output UserStruct) {
 		return
 	}
 	output.Status = "ok"
-	output.Type = util.CheckEpassportType(username)
+	output.Type = utils.CheckEpassportType(username)
 	return
 }
 
@@ -286,7 +286,7 @@ func ChkLoginDatabase(username string, password string) (output UserStruct) {
 		output.Name = data.Name
 		output.FirstName = data.FirstName
 		output.LastName = data.LastName
-		output.Type = util.CheckEpassportType(username)
+		output.Type = utils.CheckEpassportType(username)
 		output.FacCode = data.FacCode
 		output.FacName = data.FacName
 		output.DepCode = data.DepCode
@@ -354,7 +354,7 @@ func getToken(username string, u UserStruct) (output string) {
 	case "mysql":
 		qstring = "INSERT INTO token (token,timestamp,name,firstname,lastname,faccode,facname,depcode,depname,seccode,secname,email,username,cid,chiefcode,chiefname,chieffaccode,chieffacname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
 	}
-	ts := util.GetTimeStamp(time.Now())
+	ts := utils.GetTimeStamp(time.Now())
 	_, err = db.Exec(qstring, output, ts, u.Name, u.FirstName, u.LastName, u.FacCode, u.FacName, u.DepCode, u.DepName, u.SecCode, u.SecName, u.Email, username, u.CID, u.ChiefCode, u.ChiefName, u.ChiefFacCode, u.ChiefFacName)
 	if err != nil {
 		log.Printf("Error: Insert token for %s - %v\n", username, err)

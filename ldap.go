@@ -3,13 +3,13 @@ package main
 import (
 	"log"
 
-	util "github.com/ruts48code/utils4ruts"
+	utils "github.com/ruts48code/utils4ruts"
 
 	ldapserv "github.com/mavricknz/ldap"
 )
 
 func getLDAP() []string {
-	return util.RandomArrayString(conf.Elogin.LDAPServer)
+	return utils.RandomArrayString(conf.Elogin.LDAPServer)
 }
 
 func ldapLogin(username, password string) string {

@@ -3,7 +3,7 @@ package main
 import (
 	"strings"
 
-	util "github.com/ruts48code/utils4ruts"
+	utils "github.com/ruts48code/utils4ruts"
 )
 
 func CheckTKWeb(token string) (username, name, email, status string) {
@@ -13,7 +13,7 @@ func CheckTKWeb(token string) (username, name, email, status string) {
 		return
 	}
 	status = "ok"
-	usernamex := strings.Split(util.NormalizedEloginToken(token), ":")
+	usernamex := strings.Split(utils.NormalizedEloginToken(token), ":")
 	username = usernamex[0]
 	name = data.Name
 	email = data.Email

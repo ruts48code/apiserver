@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"
-	util "github.com/ruts48code/utils4ruts"
+	utils "github.com/ruts48code/utils4ruts"
 )
 
 type (
@@ -324,7 +324,7 @@ func getDataStudent(username string) (output UserStruct) {
 		output.Status = "ok"
 		output.Username = username
 		output.Name = output.FirstName + " " + output.LastName
-		output.Type = util.CheckEpassportType(username)
+		output.Type = utils.CheckEpassportType(username)
 		output.Token = getToken(username, output)
 		return
 	}

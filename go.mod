@@ -11,7 +11,7 @@ require (
 	github.com/mavricknz/ldap v0.0.0-20160227184754-f5a958005e43
 	github.com/ruts48code/crypt4ruts v0.0.0-20240313084225-184dd2dc54c9
 	github.com/ruts48code/random4ruts v0.0.0-20240313083834-115f46b90008
-	github.com/ruts48code/utils4ruts v0.0.0-20240314014233-39307c7fbdae
+	github.com/ruts48code/utils4ruts v0.0.0-20240314074217-41b4c4c6b930
 	gopkg.in/mail.v2 v2.3.1
 	gopkg.in/yaml.v3 v3.0.1
 )

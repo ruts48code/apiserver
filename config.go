@@ -1,10 +1,5 @@
 package main
 
-import (
-	util "github.com/ruts48code/utils4ruts"
-	"gopkg.in/yaml.v3"
-)
-
 type (
 	Conf struct {
 		Listen     string           `yaml:"listen"`
@@ -58,8 +53,3 @@ type (
 var (
 	conf Conf
 )
-
-func processConfig() {
-	confdata := util.ReadFile("/etc/apiserver.yml")
-	yaml.Unmarshal(confdata, &conf)
-}
