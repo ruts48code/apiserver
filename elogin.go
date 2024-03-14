@@ -180,10 +180,7 @@ func CreateLoginDatabase(result UserStruct, password string) {
 	}
 	defer db.Close()
 
-	appmutex.Lock()
 	salt := random.GetRandomString(4)
-	appmutex.Unlock()
-
 	passx := crypt.MooHash([]byte(password), []byte(result.Username), []byte(salt))
 
 	_, err = db.Exec("INSERT INTO elogin (username, password, name, firstname, lastname, faccode, facname, depcode, depname, seccode, secname, email, cid, chiefcode, chiefname, chieffaccode, chieffacname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", result.Username, passx, result.Name, result.FirstName, result.LastName, result.FacCode, result.FacName, result.DepCode, result.DepName, result.SecCode, result.SecName, result.Email, result.CID, result.ChiefCode, result.ChiefName, result.ChiefFacCode, result.ChiefFacName)
@@ -302,9 +299,7 @@ func getUsernameDatabase(username string) (output UserDB) {
 }
 
 func getToken(username string, u UserStruct) (output string) {
-	appmutex.Lock()
 	output = username + ":" + random.GetRandomString(conf.Elogin.TokenSize)
-	appmutex.Unlock()
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
 		log.Printf("Error: Get token for %s - %v\n", username, err)

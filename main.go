@@ -3,16 +3,11 @@ package main
 import (
 	"errors"
 	"log"
-	"sync"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html/v2"
 	utils "github.com/ruts48code/utils4ruts"
-)
-
-var (
-	appmutex sync.Mutex
 )
 
 func main() {
