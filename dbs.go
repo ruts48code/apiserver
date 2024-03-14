@@ -5,12 +5,14 @@ import (
 	"errors"
 	"log"
 
+	_ "github.com/denisenkom/go-mssqldb"
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	util "github.com/ruts48code/utils4ruts"
+	utils "github.com/ruts48code/utils4ruts"
 )
 
 func getDBS() (*sql.DB, error) {
-	dbN := util.RandomArrayString(conf.DBS)
+	dbN := utils.RandomArrayString(conf.DBS)
 	dbConnect := false
 	var db *sql.DB
 	var err error
