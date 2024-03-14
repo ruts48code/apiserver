@@ -1,12 +1,11 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"strings"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"
+	dbs "github.com/ruts48code/dbs4ruts"
 	utils "github.com/ruts48code/utils4ruts"
 )
 
@@ -162,7 +161,7 @@ func GetStudentRegis(id string) (output StudentRegisStructOutput) {
 		CourseWithdraw: make([]CourseWithdraw, 0),
 	}
 	dbname := GetStudentDBNameFromID(string(idx[0]))
-	db, err := sql.Open("mysql", dbname)
+	db, err := dbs.OpenDB(dbname)
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL %s for %s - %v\n", dbname, idx, err)
 		output.Status = "databaseconnect"
@@ -222,7 +221,7 @@ func GetStudentGrade(id string) (output StudentGradeStructOutput) {
 		Semester:   make([]Semester, 0),
 	}
 	dbname := GetStudentDBNameFromID(string(idx[0]))
-	db, err := sql.Open("mysql", dbname)
+	db, err := dbs.OpenDB(dbname)
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL %s for %s - %v\n", dbname, idx, err)
 		output.Status = "databaseconnect"
@@ -290,9 +289,9 @@ func GetStudentGrade(id string) (output StudentGradeStructOutput) {
 	return
 }
 
-func getStudentDB(username string) (db *sql.DB, err error) {
+func getStudentDB(username string) (db *dbs.DB4ruts, err error) {
 	dbname := GetStudentDBNameFromID(string(username[1]))
-	db, err = sql.Open("mysql", dbname)
+	db, err = dbs.OpenDB(dbname)
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL %s for %s - %v\n", dbname, username, err)
 	} else {
@@ -345,7 +344,7 @@ func GetStudentDBNameFromID(id string) (dbname string) {
 func GetStudentSupervisor(id string) (output []SupervisorForStudentStruct) {
 	output = make([]SupervisorForStudentStruct, 0)
 	dbname := GetStudentDBNameFromID(string(id[0]))
-	db, err := sql.Open("mysql", dbname)
+	db, err := dbs.OpenDB(dbname)
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL %s for %s - %v\n", dbname, id, err)
 		return
@@ -386,7 +385,7 @@ func GetAllSupervisor() (output []SupervisorDataStruct) {
 
 func GetSupervisorFromServer(server string) (output []SupervisorDataStruct) {
 	output = make([]SupervisorDataStruct, 0)
-	db, err := sql.Open("mysql", server)
+	db, err := dbs.OpenDB(server)
 	if err != nil {
 		log.Printf("Error: Cannot connect to SiS MySQL %s - %v\n", server, err)
 		return

@@ -3,11 +3,6 @@ package main
 type (
 	Conf struct {
 		Listen     string           `yaml:"listen"`
-		DBUsername string           `yaml:"dbusername"`
-		DBPassword string           `yaml:"dbpassword"`
-		DBName     string           `yaml:"dbname"`
-		DBParam    string           `yaml:"dbparam"`
-		DBType     string           `yaml:"dbtype"`
 		DBS        []string         `yaml:"dbs"`
 		Elogin     EloginStruct     `yaml:"elogin"`
 		Personal   PersonalStruct   `yaml:"personal"`

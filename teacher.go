@@ -1,13 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	dbs "github.com/ruts48code/dbs4ruts"
 )
 
 type (
@@ -260,7 +260,7 @@ func GetSupervisorClassMember(username string, classid string) (output StudentSu
 func GetMemberClassForTeacherServer(username string, classid string, serverIDx string) (output []StudentSupervisorStruct) {
 	output = make([]StudentSupervisorStruct, 0)
 	dbname := GetStudentDBNameFromID(serverIDx)
-	db, err := sql.Open("mysql", dbname)
+	db, err := dbs.OpenDB(dbname)
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL %s for %s - %v\n", dbname, username, err)
 	} else {
@@ -311,7 +311,7 @@ func GetSupervisorClass(username string) (output ClassListStructOutput) {
 func GetClassForTeacherServer(username string, serverIDx string) (output []ClassListStruct) {
 	output = make([]ClassListStruct, 0)
 	dbname := GetStudentDBNameFromID(serverIDx)
-	db, err := sql.Open("mysql", dbname)
+	db, err := dbs.OpenDB(dbname)
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL %s for %s - %v\n", dbname, username, err)
 	} else {

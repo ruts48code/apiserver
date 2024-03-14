@@ -1,14 +1,9 @@
 listen: ":80"
-dbusername: "dbusername"
-dbpassword: "dbpassword"
-dbname: "dbname"
-dbparam: ""
-dbtype: "mysql" #'postgres'
 dbs:
-- "10.5.0.1"
-- "10.5.0.2"
-- "10.5.0.3"
-- "10.5.0.4"
+- "mysql://user:pass@tcp(10.5.0.1)/database?parseTime=true"
+- "mysql://user:pass@tcp(10.5.0.2)/database?parseTime=true"
+- "mysql://user:pass@tcp(10.5.0.3)/database?parseTime=true"
+- "mysql://user:pass@tcp(10.5.0.4)/database?parseTime=true"
 elogin:
   ldapdomain: "dc=example,dc=ac,dc=th"
   ldapserver:
@@ -19,7 +14,7 @@ elogin:
   clean: 60
   tokensize: 64
 personal:
-  server: "sqlserver://user:password@10.0.0.1/"
+  server: "sqlserver://user:password@10.0.0.1/?database=dbname"
   permission:
     readAll:
     - "someone.x"
@@ -27,10 +22,10 @@ student:
   server:
   - name: "Songkhla"
     id: "1"
-    server: "user:password@tcp(127.0.0.1:3306)/songkhla"
+    server: "mysql://user:password@tcp(127.0.0.1)/songkhla?parseTime=true"
   - name: "Rattaphum"
     id: "2"
-    server: "user:password@tcp(127.0.0.1:3306)/rattaphum"
+    server: "mysql://user:password@tcp(127.0.0.1)/rattaphum?parseTime=true"
 openathens:
   connectionid: "12345"
   connectionuri: "https://login.openathens.net/api/v1/{domain}/organisation/{oid}/local-auth/session"

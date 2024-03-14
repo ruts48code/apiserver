@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	dbs "github.com/ruts48code/dbs4ruts"
 )
 
 type (
@@ -127,14 +128,14 @@ func PersonalCode(ctx *fiber.Ctx) error {
 
 func getAcademicInfo(username string) (output UserAcademicInfoArrayStruct) {
 	output.Status = "ok"
-	db, err := getSQLServer()
+	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
 		log.Printf("Error: Get academic info databse for %s - %v\n", username, err)
 		output.Status = "database"
 		return
 	}
 	defer db.Close()
-	rows, err := db.Query("SELECT CITIZEN_ID,PREFIX_NAME,STF_FNAME,STF_LNAME,STF_FNAME_EN,STF_LNAME_EN,POSITION_TNAME,CAMPUS_CODE,CAMPUS_TNAME,FACULTY_CODE,FacName,DEPARTMENT_CODE,DepName,SECTION_CODE,SECTION_TNAME,UOC_STAFF_EMAIL,GENDER_NAME,HGRAD_OUTDATE,GRAD_LEV_TNAME,HGRAD_DEGREE,PROGRAM_NAME,HGRAD_UNIV,NATION_TNAME,NATION_ENAME FROM vRISS WHERE USERNAME_CISCO=@p1;", username)
+	rows, err := db.Query("SELECT CITIZEN_ID,PREFIX_NAME,STF_FNAME,STF_LNAME,STF_FNAME_EN,STF_LNAME_EN,POSITION_TNAME,CAMPUS_CODE,CAMPUS_TNAME,FACULTY_CODE,FacName,DEPARTMENT_CODE,DepName,SECTION_CODE,SECTION_TNAME,UOC_STAFF_EMAIL,GENDER_NAME,HGRAD_OUTDATE,GRAD_LEV_TNAME,HGRAD_DEGREE,PROGRAM_NAME,HGRAD_UNIV,NATION_TNAME,NATION_ENAME FROM vRISS WHERE USERNAME_CISCO=?;", username)
 	if err != nil {
 		log.Printf("Error: Query get academic info for %s - %v\n", username, err)
 		output.Status = "database"
@@ -172,7 +173,7 @@ func pcode() (output PersonalCodeStruct) {
 }
 
 func getDataString(data string) (output []string) {
-	db, err := getSQLServer()
+	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 		return
@@ -193,7 +194,7 @@ func getDataString(data string) (output []string) {
 }
 
 func getPairDataString(data1 string, data2 string) (output []CodeStruct) {
-	db, err := getSQLServer()
+	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 		return
