@@ -1,0 +1,229 @@
+<html>
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>RUTS API</title>
+  <style>
+  @font-face {
+    font-family: sarabun;
+    font-style:normal;
+    font-weight:normal;
+    src: url("/fonts/Sarabun-Regular.ttf");
+  }
+  @font-face {
+    font-family: sarabun;
+    font-style:italic;
+    font-weight:normal;
+    src: url("/fonts/Sarabun-Italic.ttf");
+  }
+  @font-face {
+    font-family: sarabun;
+    font-style:normal;
+    font-weight:bold;
+    src: url("/fonts/Sarabun-Bold.ttf");
+  }
+  @font-face {
+    font-family: sarabun;
+    font-style:italic;
+    font-weight:bold;
+    src: url("/fonts/Sarabun-BoldItalic.ttf");
+  }
+  body {
+    font-family: sarabun, cursive;
+    font-size: 14pt;
+    background-color: #f9f9e0;
+    color: #363062;
+    line-height: 30pt;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content:left;
+    align-content:center;
+    align-items: stretch;
+    padding: 10pt;
+    gap: 10pt 10pt;    
+  }
+  h1 {
+    font-size: 22pt;
+  }
+  h2 {
+    font-size: 18pt;
+  }
+  h1, h2 {
+    display: flex;
+    justify-content:left;
+    padding: 5pt;
+  }
+  .st1{
+    padding: 10pt;
+    border-style: solid;
+    border-width: 2pt;
+    border-color: #363062;
+    border-radius: 10pt;
+  }
+  .st2{
+    padding: 10pt;
+    background-color: blanchedalmond;
+    border-radius: 10pt;
+  }
+  td {
+    padding: 5pt;
+    font-size: 12pt;
+  }
+  td.comment {
+    color:chocolate;
+  }
+  </style>
+</head>
+<body>
+    <h1>รายละเอียดระบบ RUTS API</h1>
+    <div class="st1">
+        <h1>ระบบ elogin</h1>
+        <div>สำหรับใช้ในการยืนยันตัวตนเพื่อเข้าใช้งานระบบสารสนเทศ</div>
+        <div class="st2">
+            <h2>Authentication</h2>
+            <table>
+                <tr><td><b>url</b></td><td>https://api.rmutsv.ac.th/elogin</td></tr>
+                <tr><td><b>method</b></td><td>post</td></tr>
+                <tr><td><b>input</b></td><td>username: string <- epassport username</td></tr>
+                <tr><td> </td><td>password: string <- epassport password</td></tr>
+                <tr><td><b>output</b></td><td>status: string <- reply status</td></tr>
+                <tr><td> </td><td class="comment">ok = successful</td></tr>
+                <tr><td> </td><td class="comment">json = json error</td></tr>
+                <tr><td> </td><td class="comment">password = incorrect password or username</td></tr>
+                <tr><td> </td><td>cid: string <- citizen id</td></tr>
+                <tr><td> </td><td>username: string <- epassport username</td></tr>
+                <tr><td> </td><td>name: string <- fullname in Thai</td></tr>
+                <tr><td> </td><td>type: string <- username type</td></tr>
+                <tr><td> </td><td class="comment">staff = staff person such as teacher or officer</td></tr>
+                <tr><td> </td><td class="comment">student = student person</td></tr>
+                <tr><td> </td><td>faccode: string <- faculty Code</td></tr>
+                <tr><td> </td><td>facname: string <- faculty name</td></tr>
+                <tr><td> </td><td>depcode: string <- department Code</td></tr>
+                <tr><td> </td><td>depname: string <- department name</td></tr>
+                <tr><td> </td><td>seccode: string <- section Code</td></tr>
+                <tr><td> </td><td>secname: string <- section name</td></tr>
+                <tr><td> </td><td>faccode: string <- faculty Code</td></tr>
+                <tr><td> </td><td>email: string <- email</td></tr>
+                <tr><td> </td><td>token: string <- security token</td></tr>
+            </table>
+        </div><br />
+        <div class="st2">
+            <h2>Token Security Check</h2>
+            <table>
+                <tr><td><b>url</b></td><td>https://api.rmutsv.ac.th/elogin/token/<b>token</b></td></tr>
+                <tr><td> </td><td class="comment">token: string <- security token</td></tr>
+                <tr><td><b>method</b></td><td>get</td></tr>
+                <tr><td><b>output</b></td><td>status: string <- reply status</td></tr>
+                <tr><td> </td><td class="comment">ok = successful</td></tr>
+                <tr><td> </td><td class="comment">database = database server is a problem</td></tr>
+                <tr><td> </td><td class="comment">token = incorrect token</td></tr>
+                <tr><td> </td><td>cid: string <- citizen id</td></tr>
+                <tr><td> </td><td>username: string <- epassport username</td></tr>
+                <tr><td> </td><td>name: string <- fullname in Thai</td></tr>
+                <tr><td> </td><td>type: string <- username type</td></tr>
+                <tr><td> </td><td class="comment">staff = staff person such as teacher or officer</td></tr>
+                <tr><td> </td><td class="comment">student = student person</td></tr>
+                <tr><td> </td><td>faccode: string <- faculty code</td></tr>
+                <tr><td> </td><td>facname: string <- faculty name</td></tr>
+                <tr><td> </td><td>depcode: string <- department Code</td></tr>
+                <tr><td> </td><td>depname: string <- department name</td></tr>
+                <tr><td> </td><td>seccode: string <- section Code</td></tr>
+                <tr><td> </td><td>secname: string <- section name</td></tr>
+                <tr><td> </td><td>faccode: string <- faculty Code</td></tr>
+                <tr><td> </td><td>email: string <- email</td></tr>
+                <tr><td> </td><td>token: string <- security token</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="st1">
+        <h1>ระบบ personal</h1>
+        <div>สำหรับใช้ในการดึงข้อมูลส่วนบุคคล</div>
+        <div class="st2">
+            <h2>Academic Information Retrieval by Self</h2>
+            <table>
+                <tr><td><b>url</b></td><td>https://api.rmutsv.ac.th/personal/academic/<b>token</b></td></tr>
+                <tr><td> </td><td class="comment">token: string <- security token</td></tr>
+                <tr><td><b>method</b></td><td>get</td></tr>
+                <tr><td><b>output</b></td><td>status: string <- reply status</td></tr>
+                <tr><td> </td><td class="comment">ok = successful</td></tr>
+                <tr><td> </td><td class="comment">database = database server is a problem</td></tr>
+                <tr><td> </td><td class="comment">token = incorrect token</td></tr>
+                <tr><td> </td><td class="comment">not found = information can not be found</td></tr>
+                <tr><td> </td><td>data: []struct <- Information data</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.cid: string <- citizen id</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.prefix: string <- name prefix</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.fname: string <- first name in Thai</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.lname: string <- last name in Thai</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.fnamee: string <- first name in English</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.lnamee: string <- last name in English</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.aposition: string <- academic postion</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.campuscode: string <- campus code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.campusname: string <- campus name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.facultycode: string <- faculty code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.facultyname: string <- faculty name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.departmentcode: string <- departmant code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.departname: string <- department name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.sectioncode: string <- section code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.sectionname: string <- section name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.email: string <- email</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.gender: string <- gender</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.epassport: string <- epassport username</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.education: []struct <- education information</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.graduate: string <- graduated date in format yyyy-mm-dd</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.level: string <- education level</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.degree: string <- education degree</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.program: string <- education program</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.university: string <- university</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.nation: string <- university country in Thai</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.natione: string <- university country in English</td></tr>
+            </table>
+        </div><br />
+        <div class="st2">
+            <h2>Academic Information Retrieval by Privilege</h2>
+            <table>
+                <tr><td><b>url</b></td><td>https://api.rmutsv.ac.th/personal/academic/<b>token</b></td></tr>
+                <tr><td> </td><td class="comment">token: string <- security token</td></tr>
+                <tr><td><b>method</b></td><td>post</td></tr>
+                <tr><td><b>input</b></td><td>username: []string <- epassport username</td></tr>
+                <tr><td><b>output</b></td><td>status: string <- reply status</td></tr>
+                <tr><td> </td><td class="comment">ok = successful</td></tr>
+                <tr><td> </td><td class="comment">permission = not a privilege</td></tr>
+                <tr><td> </td><td class="comment">token = incorrect token</td></tr>
+                <tr><td> </td><td>data: []struct <- Information data</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.cid: string <- citizen id</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.prefix: string <- name prefix</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.fname: string <- first name in Thai</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.lname: string <- last name in Thai</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.fnamee: string <- first name in English</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.lnamee: string <- last name in English</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.aposition: string <- academic postion</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.campuscode: string <- campus code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.campusname: string <- campus name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.facultycode: string <- faculty code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.facultyname: string <- faculty name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.departmentcode: string <- departmant code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.departname: string <- department name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.sectioncode: string <- section code</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.sectionname: string <- section name</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.email: string <- email</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.gender: string <- gender</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.epassport: string <- epassport username</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;data.education: []struct <- education information</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.graduate: string <- graduated date in format yyyy-mm-dd</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.level: string <- education level</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.degree: string <- education degree</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.program: string <- education program</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.university: string <- university</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.nation: string <- university country in Thai</td></tr>
+                <tr><td> </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data.education.natione: string <- university country in English</td></tr>
+            </table>
+        </div><br />
+
+    </div>
+</body>
+</html>

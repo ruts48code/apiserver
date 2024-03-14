@@ -1,0 +1,38 @@
+listen: ":80"
+dbusername: "dbusername"
+dbpassword: "dbpassword"
+dbname: "dbname"
+dbparam: ""
+dbtype: "mysql" #'postgres'
+dbs:
+- "10.5.0.1"
+- "10.5.0.2"
+- "10.5.0.3"
+- "10.5.0.4"
+elogin:
+  ldapdomain: "dc=example,dc=ac,dc=th"
+  ldapserver:
+  - "10.1.0.1"
+  - "10.1.0.2"
+  - "10.1.0.3"
+  expire: 3600
+  clean: 60
+  tokensize: 64
+personal:
+  server: "sqlserver://user:password@10.0.0.1/"
+  permission:
+    readAll:
+    - "someone.x"
+student:
+  server:
+  - name: "Songkhla"
+    id: "1"
+    server: "user:password@tcp(127.0.0.1:3306)/songkhla"
+  - name: "Rattaphum"
+    id: "2"
+    server: "user:password@tcp(127.0.0.1:3306)/rattaphum"
+openathens:
+  connectionid: "12345"
+  connectionuri: "https://login.openathens.net/api/v1/{domain}/organisation/{oid}/local-auth/session"
+  returnurl: "https://example.com"
+  apikey: "12345"

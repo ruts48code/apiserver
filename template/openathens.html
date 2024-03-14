@@ -1,0 +1,154 @@
+<html>
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>RUTS API</title>
+  <style>
+  @font-face {
+    font-family: sarabun;
+    font-style:normal;
+    font-weight:normal;
+    src: url("/fonts/Sarabun-Regular.ttf");
+  }
+  @font-face {
+    font-family: sarabun;
+    font-style:italic;
+    font-weight:normal;
+    src: url("/fonts/Sarabun-Italic.ttf");
+  }
+  @font-face {
+    font-family: sarabun;
+    font-style:normal;
+    font-weight:bold;
+    src: url("/fonts/Sarabun-Bold.ttf");
+  }
+  @font-face {
+    font-family: sarabun;
+    font-style:italic;
+    font-weight:bold;
+    src: url("/fonts/Sarabun-BoldItalic.ttf");
+  }
+  body {
+    font-family: sarabun, cursive;
+    font-size: 14pt;
+    background-color: #f9f9e0;
+    color: #363062;
+    line-height: 30pt;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content:left;
+    align-content:center;
+    align-items: stretch;
+    padding: 10pt;
+    gap: 10pt 10pt;    
+  }
+  h1 {
+    font-size: 22pt;
+  }
+  h1, h2 {
+    display: flex;
+    justify-content:center;
+    padding: 5pt;
+  }
+  input, button {
+    font-size: 14pt;
+    height: 25pt;
+    width: 200pt;
+  }
+  .login{
+    display: flex;
+    flex-direction: column;
+    padding: 10pt;
+  }
+  .field {
+    display: flex;
+    flex-direction: row;
+    padding: 5pt;
+  }
+  </style>
+</head>
+<body>
+<h1>OpenAthens Login</h1>
+<div class="login">
+    <div class="field"><input type="text" id="username" placeholder="username"/></div>
+    <div class="field"><input type="password" id="password" placeholder="password"/></div>
+    <div class="field"><button id="buttonc" onclick="loginchk();">Login</button></div>
+</div>
+<script>
+  let datajson;
+const loginchk = async () => {
+  let username = document.getElementById("username");
+  let password = document.getElementById("password");
+  let buttonc = document.getElementById("buttonc");
+  buttonc.disabled = true;
+
+  let res = await fetch("https://api.rmutsv.ac.th/elogin",{
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      "username": username.value,
+      "password": password.value,
+    }), 
+  });
+  datajson = await res.json();
+  if(datajson.status!="ok"){
+    alert("Login Fail...");
+    username.value = "";
+    password.value = "";
+    buttonc.disabled = false;
+  }else{
+    processOpenAthens();
+  }
+}
+
+const processOpenAthens = async () => {
+  let dataathens = JSON.stringify({
+    "connectionID" : "{{.connectionID}}",
+    "uniqueUserIdentifier" : datajson.username,
+    "displayName": datajson.name,
+    "returnUrl" : "{{.returnURL}}",
+    "attributes" : {
+      "firstName" : "John",
+      "lastName" : "Smith",
+      "emailAddress" : "john.smith@example.org",
+      "permissionSets" : [
+        "example#default",
+        "example#staff"
+      ]
+    }    
+  });
+  alert(dataathens);
+  alert("{{.connectionURI}}");
+  let res = await fetch("{{.connectionURI}}",{
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/vnd.eduserv.iam.auth.localAccountSessionRequest+json",
+      "Authorization": "{{.apiKey}}",
+    },
+    mode: 'no-cors',
+    body: dataathens, 
+  });
+  alert("api finish");
+  alert(res.status);
+  if(res.status!=200){
+    alert("Error API...");
+    let xdata = await res.json();
+    alert(xdata.reason);
+    alert(xdata.message);
+    username.value = "";
+    password.value = "";
+    buttonc.disabled = false;
+  }else{
+    let xdata = await res.json();
+    window.open(xdata.sessionInitiatorUrl,"_self");
+  }
+}
+</script>
+</body>
+</html>
