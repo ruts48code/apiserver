@@ -24,7 +24,8 @@ personal:
     - "someone.x"
 student:
   cache:
-    interval: 3600
+    update: 3600
+    clean: 60
   server:
   - name: "Songkhla"
     id: "1"

@@ -36,7 +36,8 @@ type (
 	}
 
 	StudentCacheStruct struct {
-		Interval int `yaml:"interval"`
+		Update int `yaml:"update"`
+		Clean  int `yaml:"clean"`
 	}
 
 	SisServerStruct struct {
