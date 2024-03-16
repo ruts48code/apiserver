@@ -250,6 +250,7 @@ func GetStudentRegis(id string) (output StudentRegisStructOutput) {
 	} else {
 		log.Printf("Log: Connect to MySQL for %s\n", idx)
 	}
+	defer db.Close()
 
 	rows, err := db.Query("select r.semester,sem.semestertext,sem.semestertext2,r.student,r.course as courseid,c.tname as coursename,c.th_cr,c.lb_cr,r.section,r.status as courseStatus,fInstructorName(cfl.instructor) as teacherName,r.advisorok,o.uploadDate as advisorDate,o.majorok,o.majorDate,fInstructorName(m.head) as majorname,o.officeok,o.officeDate,f.officer_user,o.vice_deanok,o.vice_deanDate,fInstructorName(f.vice_dean) as vice_deanname,o.deanok,o.deanDate,fInstructorName(f.dean) as deanname,o.vice_campusok,o.vice_campusDate,fInstructorName(cp.vice_campus) as vice_campusname from basketregis r,basketregisok o,semester sem,course c,course_offer_limit cfl,login_web s,advisor_classroom adv,majorregis m,department d,facultyofcourse f,campus cp where r.student=o.student and r.semester=o.semester and r.semester=sem.semester and r.course=c.id and r.semester=cfl.semester and r.course=cfl.course and r.section=cfl.section and r.student=s.id and s.classroom=adv.classroom and s.admiss_year=adv.admiss_year and adv.majorregis=m.id and m.depid=d.id and d.faculty=f.id and sem.regis_status='Y' and r.student=?;", idx)
 	if err != nil {
@@ -307,9 +308,9 @@ func GetStudentGrade(id string) (output StudentGradeStructOutput) {
 		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", idx, err)
 		output.Status = "databaseconnect"
 		return output
-	} else {
-		log.Printf("Log: Connect to MySQL for %s\n", idx)
 	}
+	log.Printf("Log: Connect to MySQL for %s\n", idx)
+	defer db.Close()
 
 	rows, err := db.Query("select t.student,sem.semester,sem.semestertext,sem.semestertext2,g.regis_cr,g.earn_cr,g.gps,g.all_regis_cr,g.all_earn_cr,g.gpa,p.status as proStatus,fStatusName(p.status) as proStatusName,fStudentStatus(t.student) as std_status,fStatusName(fStudentStatus(t.student)) as std_statusName,c.id as courseid,c.tname as coursename,c.th_cr,c.lb_cr,t.grade from transcript t,gpa g,semester sem,course c,pro_status p where t.student=g.student and t.semester=g.semester and g.semester=sem.semester and t.course=c.id and g.student=p.student and g.semester=p.semester and t.student=? order by sem.semester;", idx)
 	if err != nil {
@@ -317,6 +318,8 @@ func GetStudentGrade(id string) (output StudentGradeStructOutput) {
 		output.Status = "databasequery"
 		return output
 	}
+	defer rows.Close()
+
 	semester := Semester{
 		Course: make([]Course, 0),
 	}
@@ -430,15 +433,17 @@ func GetStudentSupervisor(id string) (output []SupervisorForStudentStruct) {
 	if err != nil {
 		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", id, err)
 		return
-	} else {
-		log.Printf("Log: Connect to MySQL for %s\n", id)
 	}
+	log.Printf("Log: Connect to MySQL for %s\n", id)
+	defer db.Close()
 
 	rows, err := db.Query("select fInstructorName(a.advisor) as advisorName,priority,l.esearch,l.loginstatus from advisor_student a,instructorLogin l where a.advisor=l.instructor and a.student=?;", id)
 	if err != nil {
 		log.Printf("Error: Query get data student for %s - %v\n", id, err)
 		return
 	}
+	defer rows.Close()
+
 	for rows.Next() {
 		a := ""
 		supervisor := SupervisorForStudentStruct{}
@@ -471,9 +476,8 @@ func GetSupervisorFromServer(server string) (output []SupervisorDataStruct) {
 	if err != nil {
 		log.Printf("Error: Cannot connect to SiS MySQL %s - %v\n", server, err)
 		return
-	} else {
-		log.Printf("Log: Connect to SiS MySQL %s\n", server)
 	}
+	log.Printf("Log: Connect to SiS MySQL %s\n", server)
 	defer db.Close()
 
 	rows, err := db.Query("select fInstructorName(a.advisor),i.esearch,f.tname as facultyname from login_web s,advisor_student a,instructorLogin i,instrfac t,majorregis m,department d,facultyofcourse f where s.id=a.student and a.advisor=i.instructor and a.advisor=t.instructor and t.majorid=m.id and m.depid=d.id and d.faculty=f.id and a.priority='M' and i.loginstatus='epassport' and s.status in (select id from status where in_status='Y') and s.admiss_year <= (select academicyear from campus) group by a.advisor,i.esearch,f.tname")
@@ -481,6 +485,8 @@ func GetSupervisorFromServer(server string) (output []SupervisorDataStruct) {
 		log.Printf("Error: Query get supervisor from server %s - %v\n", server, err)
 		return
 	}
+	defer rows.Close()
+
 	for rows.Next() {
 		data := SupervisorDataStruct{}
 		data.Class = make([]ClassTraceStruct, 0)
@@ -565,7 +571,6 @@ func ProcessStudentSummary(data map[string]StudentProcess) (output StudentProces
 	output.Status = "ok"
 	output.Org = "มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย"
 	for k, v := range data {
-		log.Printf("Dep = %s\n", k)
 		output.Trace.ConfirmAllNum += v.ConfirmAllNum
 		output.Trace.NotConfirmAllNum += v.NotConfirmAllNum
 		output.Trace.PreservNum += v.PreservNum
@@ -752,6 +757,7 @@ func GetStudentGetAllData() (output StudentProcessUniStruct) {
 		output.Status = "query"
 		return
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		data := ""

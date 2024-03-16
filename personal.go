@@ -135,6 +135,7 @@ func getAcademicInfo(username string) (output UserAcademicInfoArrayStruct) {
 		return
 	}
 	defer db.Close()
+
 	rows, err := db.Query("SELECT CITIZEN_ID,PREFIX_NAME,STF_FNAME,STF_LNAME,STF_FNAME_EN,STF_LNAME_EN,POSITION_TNAME,CAMPUS_CODE,CAMPUS_TNAME,FACULTY_CODE,FacName,DEPARTMENT_CODE,DepName,SECTION_CODE,SECTION_TNAME,UOC_STAFF_EMAIL,GENDER_NAME,HGRAD_OUTDATE,GRAD_LEV_TNAME,HGRAD_DEGREE,PROGRAM_NAME,HGRAD_UNIV,NATION_TNAME,NATION_ENAME FROM vRISS WHERE USERNAME_CISCO=?;", username)
 	if err != nil {
 		log.Printf("Error: Query get academic info for %s - %v\n", username, err)
@@ -179,11 +180,13 @@ func getDataString(data string) (output []string) {
 		return
 	}
 	defer db.Close()
+
 	rows, err := db.Query("SELECT DISTINCT " + data + " FROM vRISS;")
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 		return
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		data := ""
@@ -200,11 +203,13 @@ func getPairDataString(data1 string, data2 string) (output []CodeStruct) {
 		return
 	}
 	defer db.Close()
+
 	rows, err := db.Query("SELECT DISTINCT " + data1 + "," + data2 + " FROM vRISS;")
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 		return
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		datax := CodeStruct{}
