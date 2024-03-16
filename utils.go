@@ -60,7 +60,7 @@ func CleanCache(domain string) {
 		rows.Scan(&t)
 	}
 	log.Printf("Domain = %s - Timestamp = %s\n", domain, utils.GetTimeStamp(t))
-	_, err = db.Exec("delete from cache where timestamp < ?", utils.GetTimeStamp(t))
+	_, err = db.Exec("delete from cache where domain=? and timestamp < ?", domain, utils.GetTimeStamp(t))
 	if err != nil {
 		log.Printf("Error: cannot delete cache domain %s : %v\n", domain, err)
 	}
