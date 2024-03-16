@@ -99,8 +99,8 @@ func elogin(ctx *fiber.Ctx) error {
 		})
 	}
 
-	username := utils.MakeString(utils.NormalizeUsername(data.Username))
-	password := utils.MakeString(data.Password)
+	username := utils.NormalizeUsername(data.Username)
+	password := data.Password
 
 	if username == "" || password == "" {
 		return ctx.JSON(UserStruct{
