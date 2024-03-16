@@ -3,11 +3,18 @@ package main
 type (
 	Conf struct {
 		Listen     string           `yaml:"listen"`
+		OTP        OTPStruct        `yaml:"otp"`
 		DBS        []string         `yaml:"dbs"`
 		Elogin     EloginStruct     `yaml:"elogin"`
 		Personal   PersonalStruct   `yaml:"personal"`
 		Student    StudentStruct    `yaml:"student"`
 		OpenAthens OpenAthensStruct `yaml:"openathens"`
+	}
+
+	OTPStruct struct {
+		Key      string `yaml:"key"`
+		Size     int    `yaml:"size"`
+		Interval int    `yaml:"interval"`
 	}
 
 	EloginStruct struct {
@@ -24,7 +31,12 @@ type (
 	}
 
 	StudentStruct struct {
-		Server []SisServerStruct `yaml:"server"`
+		Cache  StudentCacheStruct `yaml:"cache"`
+		Server []SisServerStruct  `yaml:"server"`
+	}
+
+	StudentCacheStruct struct {
+		Interval int `yaml:"interval"`
 	}
 
 	SisServerStruct struct {

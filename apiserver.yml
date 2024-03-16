@@ -1,4 +1,8 @@
 listen: ":80"
+otp:
+  key: "secretword"
+  size: 24
+  interval: 30
 dbs:
 - "mysql://user:pass@tcp(10.5.0.1)/database?parseTime=true"
 - "mysql://user:pass@tcp(10.5.0.2)/database?parseTime=true"
@@ -19,6 +23,8 @@ personal:
     readAll:
     - "someone.x"
 student:
+  cache:
+    interval: 3600
   server:
   - name: "Songkhla"
     id: "1"

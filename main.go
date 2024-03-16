@@ -61,7 +61,8 @@ func main() {
 	app.Get("/student/grade/:id/:token", StudentGrade)
 	app.Get("/student/regis/:id/:token", StudentRegis)
 
-	app.Get("/student/report/alldata/:token", StudentAllData)
+	app.Get("/student/report/processalldata/:otp", StudentProcessAllData)
+	app.Get("/student/report/getalldata/:token", StudentGetAllData)
 
 	app.Post("/mcas/mail/:token", SendMail)
 
