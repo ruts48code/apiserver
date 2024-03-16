@@ -72,8 +72,22 @@ func eloginToken(ctx *fiber.Ctx) error {
 
 func eloginDelete(ctx *fiber.Ctx) error {
 	username := utils.NormalizeUsername(ctx.Params("username"))
-	DeleteLoginDatabase(username)
+	go DeleteLoginDatabase(username)
 	return ctx.SendString("ok")
+}
+
+func eloginClean(ctx *fiber.Ctx) error {
+	switch CheckOTP(ctx.Params("otp")) {
+	case true:
+		go CleanTokenElogin()
+		return ctx.JSON(fiber.Map{
+			"status": "ok",
+		})
+	default:
+		return ctx.JSON(fiber.Map{
+			"status": "otp",
+		})
+	}
 }
 
 func elogin(ctx *fiber.Ctx) error {
@@ -315,4 +329,21 @@ func getToken(username string, u UserStruct) (output string) {
 
 	log.Printf("Log: Save token for %s\n", username)
 	return
+}
+
+func CleanTokenElogin() {
+	db, err := dbs.OpenDBS(conf.DBS)
+	if err != nil {
+		log.Printf("Error: %v\n", err)
+		return
+	}
+	defer db.Close()
+
+	ts := utils.GetTimeStamp(time.Now().Add(time.Duration(conf.Elogin.Expire) * time.Second * -1))
+	_, err = db.Exec("DELETE FROM token WHERE timestamp < ?;", ts)
+	if err != nil {
+		log.Printf("Error: %v\n", err)
+	} else {
+		log.Printf("Clean Successful\n")
+	}
 }

@@ -7,10 +7,10 @@ require (
 	github.com/gofiber/template/html/v2 v2.1.1
 	github.com/mavricknz/ldap v0.0.0-20160227184754-f5a958005e43
 	github.com/ruts48code/crypt4ruts v0.0.0-20240314114945-6d7285bfde4f
-	github.com/ruts48code/dbs4ruts v0.0.0-20240314124026-d98b59b7f0f7
-	github.com/ruts48code/otp4ruts v0.0.0-20240314075323-cb37fa0de064
+	github.com/ruts48code/dbs4ruts v0.0.0-20240316033122-e7ab5f12c3b1
+	github.com/ruts48code/otp4ruts v0.0.0-20240316033014-9f389e5e0c10
 	github.com/ruts48code/random4ruts v0.0.0-20240313083834-115f46b90008
-	github.com/ruts48code/utils4ruts v0.0.0-20240314074217-41b4c4c6b930
+	github.com/ruts48code/utils4ruts v0.0.0-20240316032833-0bc5dc2a0f91
 	gopkg.in/mail.v2 v2.3.1
 )
 

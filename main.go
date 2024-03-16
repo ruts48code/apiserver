@@ -49,6 +49,7 @@ func main() {
 	app.Post("/elogin", elogin)
 	app.Get("/elogin/delete/:username", eloginDelete)
 	app.Get("/elogin/token/:token", eloginToken)
+	app.Get("/elogin/clean/:otp", eloginClean)
 
 	app.Get("/personal", PersonalCode)
 	app.Get("/personal/academic/:token", PersonalAcademicPrivate)
