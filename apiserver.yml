@@ -33,6 +33,10 @@ student:
   - name: "Rattaphum"
     id: "2"
     server: "mysql://user:password@tcp(127.0.0.1)/rattaphum?parseTime=true"
+ars: 
+  db: "mysql://user:pass@tcp(127.0.0.1)/RUTSAdmission?parseTime=true"
+  update: 180
+  clean: 60
 openathens:
   connectionid: "12345"
   connectionuri: "https://login.openathens.net/api/v1/{domain}/organisation/{oid}/local-auth/session"

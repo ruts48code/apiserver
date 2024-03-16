@@ -743,26 +743,11 @@ func ProcessStudentSummary(data map[string]StudentProcess) (output StudentProces
 }
 
 func GetStudentGetAllData() (output StudentProcessUniStruct) {
-	db, err := dbs.OpenDBS(conf.DBS)
-	if err != nil {
-		log.Printf("Error: cannot connect to database : %v\n", err)
-		output.Status = "database"
+	data := ReadCache("studentprocess")
+	if data == "" {
+		output.Status = "cache"
 		return
 	}
-	defer db.Close()
-
-	rows, err := db.Query("select data from cache where domain=? order by timestamp desc limit 1;", "studentprocess")
-	if err != nil {
-		log.Printf("Error: Query error : %v\n", err)
-		output.Status = "query"
-		return
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		data := ""
-		rows.Scan(&data)
-		json.Unmarshal([]byte(data), &output)
-	}
+	json.Unmarshal([]byte(data), &output)
 	return
 }

@@ -9,6 +9,7 @@ type (
 		Personal   PersonalStruct   `yaml:"personal"`
 		Student    StudentStruct    `yaml:"student"`
 		OpenAthens OpenAthensStruct `yaml:"openathens"`
+		ArsDB      ARSStruct        `yaml:"ars"`
 	}
 
 	OTPStruct struct {
@@ -55,6 +56,12 @@ type (
 		ConnectionURI string `yaml:"connectionuri"`
 		ReturnURL     string `yaml:"returnurl"`
 		APIKey        string `yaml:"apikey"`
+	}
+
+	ARSStruct struct {
+		DB     string `yaml:"db"`
+		Update int    `yaml:"update"`
+		Clean  int    `yaml:"clean"`
 	}
 )
 

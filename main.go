@@ -66,6 +66,11 @@ func main() {
 	app.Get("/student/report/getalldata/:token", StudentGetAllData)
 	app.Get("/student/report/cleanalldata/:otp", StudentCleanAllData)
 
+	app.Get("/ars/export", ArsExport)
+	app.Get("/ars/faculty/:facid", ArsFacExport)
+	app.Get("/ars/process/:otp", ArsProcess)
+	app.Get("/ars/clean/:otp", ArsClean)
+
 	app.Post("/mcas/mail/:token", SendMail)
 
 	app.Get("/openathens", OpenAthensLogin)
