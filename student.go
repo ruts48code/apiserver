@@ -218,6 +218,20 @@ func StudentGetAllData(ctx *fiber.Ctx) error {
 	}
 }
 
+func StudentCleanAllData(ctx *fiber.Ctx) error {
+	switch CheckOTP(ctx.Params("otp")) {
+	case true:
+		CleanCache("studentprocess")
+		return ctx.JSON(fiber.Map{
+			"status": "ok",
+		})
+	default:
+		return ctx.JSON(fiber.Map{
+			"status": "otp",
+		})
+	}
+}
+
 func GetStudentRegis(id string) (output StudentRegisStructOutput) {
 	idx := strings.TrimSpace(id)
 	output = StudentRegisStructOutput{

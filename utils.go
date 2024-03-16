@@ -40,3 +40,28 @@ func SaveCache(domain string, data string) {
 		log.Printf("Error: cannot write cache domain %s : %v\n", domain, err)
 	}
 }
+
+func CleanCache(domain string) {
+	db, err := dbs.OpenDBS(conf.DBS)
+	if err != nil {
+		return
+	}
+	defer db.Close()
+
+	rows, err := db.Query("select timestamp from cache where domain=? order by timestamp desc limit 1;", domain)
+	if err != nil {
+		log.Printf("Error: cannot query cache domain %s : %v\n", domain, err)
+		return
+	}
+	defer rows.Close()
+
+	t := time.Now()
+	for rows.Next() {
+		rows.Scan(&t)
+	}
+
+	_, err = db.Exec("delete from cache where timestamp < ?", utils.GetTimeStamp(t))
+	if err != nil {
+		log.Printf("Error: cannot delete cache domain %s : %v\n", domain, err)
+	}
+}
