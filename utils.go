@@ -59,7 +59,7 @@ func CleanCache(domain string) {
 	for rows.Next() {
 		rows.Scan(&t)
 	}
-
+	log.Printf("Domain = %s - Timestamp = %s\n", domain, utils.GetTimeStamp(t))
 	_, err = db.Exec("delete from cache where timestamp < ?", utils.GetTimeStamp(t))
 	if err != nil {
 		log.Printf("Error: cannot delete cache domain %s : %v\n", domain, err)
@@ -69,7 +69,7 @@ func CleanCache(domain string) {
 func ReadCache(domain string) (output string) {
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: cannot connect database : %v\n",err)
+		log.Printf("Error: cannot connect database : %v\n", err)
 		return ""
 	}
 	defer db.Close()
