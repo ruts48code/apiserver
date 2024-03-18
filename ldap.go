@@ -14,7 +14,7 @@ func getLDAP() []string {
 
 func ldapLogin(username, password string) string {
 	if username == "" {
-		log.Printf("Error: LDAP nil username\n")
+		log.Printf("Log: ldap-ldapLogin 1 - LDAP username is empy string\n")
 		return "none"
 	}
 
@@ -27,22 +27,22 @@ func ldapLogin(username, password string) string {
 		l = ldapserv.NewLDAPConnection(ldapN[i], 389)
 		err := l.Connect()
 		if err != nil {
-			log.Printf("Error: LDAP [%s] for %s - %v \n", ldapN[i], username, err)
+			log.Printf("Error: ldap-ldapLogin 2 - fail to connect LDAP server [%s] for %s - %v \n", ldapN[i], username, err)
 			l.Close()
 			continue
 		}
 		ldapNum = i
-		log.Printf("Log: Connect to LDAP: %s for %s\n", ldapN[i], username)
 		break
 	}
 	if ldapNum == -1 {
+		log.Printf("Log: ldap-ldapLogin - Cannot connect to any ldap server\n")
 		return "none"
 	}
 	defer l.Close()
 
 	err := l.Bind("", "")
 	if err != nil {
-		log.Printf("Error: LDAP [%s] for %s - %v\n", ldapN, username, err)
+		log.Printf("Error: ldap-ldapLogin 3 - fail to anonymous bind LDAP server [%s] for %s - %v\n", ldapN, username, err)
 		return "none"
 	}
 
@@ -55,18 +55,18 @@ func ldapLogin(username, password string) string {
 
 	sr, err := l.SearchWithPaging(search_request, 5)
 	if err != nil {
-		log.Printf("Error: LDAP [%s] for %s - %v\n", ldapN, username, err)
+		log.Printf("Error: ldap-ldapLogin 4 - fail to search in LDAP server [%s] for %s - %v\n", ldapN, username, err)
 		return "none"
 	}
 
 	if sr.Entries == nil {
-		log.Printf("Error: LDAP [%s] for %s - %v\n", ldapN, username, err)
+		log.Printf("Error: ldap-ldapLogin 5 - no entry in LDAP server [%s] for %s - %v\n", ldapN, username, err)
 		return "none"
 	}
 
 	err = l.Bind(sr.Entries[0].DN, password)
 	if err != nil {
-		log.Printf("Error: LDAP [%s] for %s - %v\n", ldapN, username, err)
+		log.Printf("Error: ldap-ldapLogin 6 - fail to direct bind LDAP server [%s] for %s - %v\n", ldapN, username, err)
 		return "none"
 	}
 

@@ -135,7 +135,7 @@ func ChkToken(tokenx string) (output UserStruct) {
 	token := utils.NormalizedEloginToken(tokenx)
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: Check token database for %s - %v\n", token, err)
+		log.Printf("Error: elogin-ChkToken - Check token database for %s - %v\n", token, err)
 		output.Status = "database"
 		return
 	}
@@ -144,14 +144,14 @@ func ChkToken(tokenx string) (output UserStruct) {
 	ts := utils.GetTimeStamp(time.Now())
 	_, err = db.Exec("UPDATE token SET timestamp=? WHERE token=?;", ts, token)
 	if err != nil {
-		log.Printf("Error: Update check token for %s - %v\n", token, err)
+		log.Printf("Error: elogin-ChkToken - Update check token for %s - %v\n", token, err)
 		output.Status = "database"
 		return
 	}
 
 	rows, err := db.Query("SELECT name,firstname,lastname,username,faccode,facname,depcode,depname,seccode,secname,email,cid,chiefcode,chiefname,chieffaccode,chieffacname FROM token WHERE token=?;", token)
 	if err != nil {
-		log.Printf("Error: Query check token for %s - %v\n", token, err)
+		log.Printf("Error: elogin-ChkToken - Query check token for %s - %v\n", token, err)
 		output.Status = "database"
 		return
 	}
@@ -175,21 +175,21 @@ func ChkToken(tokenx string) (output UserStruct) {
 func DeleteLoginDatabase(username string) {
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: Delete login database for %s - %v\n", username, err)
+		log.Printf("Error: elogin-DeleteLoginDatabase - Delete login database for %s - %v\n", username, err)
 		return
 	}
 	defer db.Close()
 
 	_, err = db.Exec("DELETE FROM elogin WHERE username=?;", username)
 	if err != nil {
-		log.Printf("Error: Delete login database for %s - %v\n", username, err)
+		log.Printf("Error: elogin-DeleteLoginDatabase - Delete login database for %s - %v\n", username, err)
 	}
 }
 
 func CreateLoginDatabase(result UserStruct, password string) {
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: Create login database for %s - %v\n", result.Username, err)
+		log.Printf("Error: elogin-CreateLoginDatabase 1 - Create login database for %s - %v\n", result.Username, err)
 		return
 	}
 	defer db.Close()
@@ -199,21 +199,21 @@ func CreateLoginDatabase(result UserStruct, password string) {
 
 	_, err = db.Exec("INSERT INTO elogin (username, password, name, firstname, lastname, faccode, facname, depcode, depname, seccode, secname, email, cid, chiefcode, chiefname, chieffaccode, chieffacname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", result.Username, passx, result.Name, result.FirstName, result.LastName, result.FacCode, result.FacName, result.DepCode, result.DepName, result.SecCode, result.SecName, result.Email, result.CID, result.ChiefCode, result.ChiefName, result.ChiefFacCode, result.ChiefFacName)
 	if err != nil {
-		log.Printf("Error: Insert login database for %s - %v\n", result.Username, err)
+		log.Printf("Error: elogin-CreateLoginDatabase 2 - Insert login database for %s - %v\n", result.Username, err)
 	}
 }
 
 func getDataStaff(username string, token bool) (output UserStruct) {
 	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
-		log.Printf("Error: Get data staff for %s - %v\n", username, err)
+		log.Printf("Error: elogin-getDataStaff 1 - Get data staff for %s - %v\n", username, err)
 		return
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT STF_FNAME, STF_LNAME, FACULTY_CODE, FacName, department_code, depname, section_code, section_tname, CITIZEN_ID FROM vUOC_STAFF_L01 WHERE USERNAME_CISCO=?", username)
 	if err != nil {
-		log.Printf("Error: Query data staff for %s - %v\n", username, err)
+		log.Printf("Error: elogin-getDataStaff 2 - Query data staff for %s - %v\n", username, err)
 		return
 	}
 	defer rows.Close()
@@ -230,7 +230,7 @@ func getDataStaff(username string, token bool) (output UserStruct) {
 
 	rows2, err2 := db.Query("SELECT CHIEF_CODE, CHIEF_NAME, FACULTY_CODE, Facname from vADMIN WHERE USERNAME_CISCO=?;", username)
 	if err2 != nil {
-		log.Printf("Error: Query data staff admin for %s - %v\n", username, err)
+		log.Printf("Error: elogin-getDataStaff 3 - Query data staff admin for %s - %v\n", username, err)
 		return
 	}
 	defer rows2.Close()
@@ -248,6 +248,7 @@ func getDataStaff(username string, token bool) (output UserStruct) {
 func ChkLoginLDAP(username string, password string) (output UserStruct) {
 	result := ldapLogin(username, password)
 	if result == "none" {
+		log.Printf("Log: elogin-ChkLoginLDAP - password fail in LDAP for %s\n", username)
 		output.Status = "password"
 		return
 	}
@@ -260,6 +261,7 @@ func ChkLoginDatabase(username string, password string) (output UserStruct) {
 	output.Status = "fail"
 	data := getUsernameDatabase(username)
 	if data.Username == "" {
+		log.Printf("Log: elogin-ChkLoginDatabase - username is empy string\n")
 		return
 	}
 
@@ -287,20 +289,21 @@ func ChkLoginDatabase(username string, password string) (output UserStruct) {
 		return
 	}
 	output.Status = "password"
+	log.Printf("Log: elogin-ChkLoginDatabase - fail password in elogin database for %s\n", username)
 	return
 }
 
 func getUsernameDatabase(username string) (output UserDB) {
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: Get username %s - %v\n", username, err)
+		log.Printf("Error: elogin-getUsernameDatabase 1 - Get username %s - %v\n", username, err)
 		return
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT username, password, name, firstname, lastname, faccode, facname, depcode, depname, seccode, secname, email, cid, chiefcode, chiefname, chieffaccode, chieffacname FROM elogin WHERE username=?", username)
 	if err != nil {
-		log.Printf("Error: Query for %s - %v\n", username, err)
+		log.Printf("Error: elogin-getUsernameDatabase 2 - Query for %s - %v\n", username, err)
 		return
 	}
 	defer rows.Close()
@@ -309,8 +312,6 @@ func getUsernameDatabase(username string) (output UserDB) {
 		rows.Scan(&output.Username, &output.Password, &output.Name, &output.FirstName, &output.LastName, &output.FacCode, &output.FacName, &output.DepCode, &output.DepName, &output.SecCode, &output.SecName, &output.Email, &output.CID, &output.ChiefCode, &output.ChiefName, &output.ChiefFacCode, &output.ChiefFacName)
 		break
 	}
-
-	log.Printf("Log: Get username database for %s\n", username)
 	return
 }
 
@@ -318,7 +319,7 @@ func getToken(username string, u UserStruct) (output string) {
 	output = username + ":" + random.GetRandomString(conf.Elogin.TokenSize)
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: Get token for %s - %v\n", username, err)
+		log.Printf("Error: elogin-getToken 1 - Get token for %s - %v\n", username, err)
 		return
 	}
 	defer db.Close()
@@ -326,17 +327,15 @@ func getToken(username string, u UserStruct) (output string) {
 	ts := utils.GetTimeStamp(time.Now())
 	_, err = db.Exec("INSERT INTO token (token,timestamp,name,firstname,lastname,faccode,facname,depcode,depname,seccode,secname,email,username,cid,chiefcode,chiefname,chieffaccode,chieffacname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", output, ts, u.Name, u.FirstName, u.LastName, u.FacCode, u.FacName, u.DepCode, u.DepName, u.SecCode, u.SecName, u.Email, username, u.CID, u.ChiefCode, u.ChiefName, u.ChiefFacCode, u.ChiefFacName)
 	if err != nil {
-		log.Printf("Error: Insert token for %s - %v\n", username, err)
+		log.Printf("Error: elogin-getToken 2 - Insert token for %s - %v\n", username, err)
 	}
-
-	log.Printf("Log: Save token for %s\n", username)
 	return
 }
 
 func CleanTokenElogin() {
 	db, err := dbs.OpenDBS(conf.DBS)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: elogin-CleanTokenElogin 1 - %v\n", err)
 		return
 	}
 	defer db.Close()
@@ -344,8 +343,6 @@ func CleanTokenElogin() {
 	ts := utils.GetTimeStamp(time.Now().Add(time.Duration(conf.Elogin.Expire) * time.Second * -1))
 	_, err = db.Exec("DELETE FROM token WHERE timestamp < ?;", ts)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
-	} else {
-		log.Printf("Clean Successful\n")
+		log.Printf("Error: elogin-CleanTokenElogin 2 - %v\n", err)
 	}
 }

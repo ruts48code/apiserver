@@ -27,6 +27,7 @@ func SendMail(ctx *fiber.Ctx) error {
 		data := SendMailStruct{}
 		err := json.Unmarshal(ctx.Body(), &data)
 		if err != nil {
+			log.Printf("Error: mcas-SendMail - json error api\n")
 			return ctx.JSON(SendMailOutStruct{
 				Status: "json",
 			})
@@ -57,7 +58,7 @@ func SendMailAPI(username string, name string, email string, data SendMailStruct
 	d := gomail.NewDialer("smtp.gmail.com", 587, "mcas@rmutsv.ac.th", "rmut$v2s48")
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	if err := d.DialAndSend(m); err != nil {
-		log.Printf("Error: mail error : %v\n", err)
+		log.Printf("Error: mcas-SendMailAPI - send mail error : %v\n", err)
 		output.Status = "mail"
 	}
 	return

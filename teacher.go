@@ -262,7 +262,7 @@ func GetMemberClassForTeacherServer(username string, classid string, serverIDx s
 	dbname := GetStudentDBNameFromID(serverIDx)
 	db, err := dbs.OpenDB(dbname)
 	if err != nil {
-		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", username, err)
+		log.Printf("Error: teacher-GetMemberClassForTeacherServer 1 - cannot connect to MySQL for %s - %v\n", username, err)
 		return
 	}
 	log.Printf("Log: Connect to MySQL for %s\n", username)
@@ -271,7 +271,7 @@ func GetMemberClassForTeacherServer(username string, classid string, serverIDx s
 	class, year := ExtractClassID(classid)
 	rows, err := db.Query("select s.id, prefix, tfirst, tlast, c_tel, gpa, status, fStatusName(s.status) as statusname, grad_sem, faculty, major, degree, fPeriodName(s.period) as periodname, s.section, fLockStudent(s.id) as stdlock, fStudentEmail(s.id) as studentEmail, fSumCr(s.id,sem.semester) as regisConfirm, fSumCrAll(s.id,sem.semester) as regisAll, fNumCourse(s.id,sem.semester) as numCourse, fStudentPreserv(s.id,sem.semester) as numPreserv, fCountCourseWithdraw(s.id,sem.semester) as wdAll, fCountCourseWithdrawOk(s.id,sem.semester) as wdConfirm, fCountImageRStatus(s.citizen) as imageStatus, s.citizen, fFundStatus(sem.semester,s.id) as fundtype, fFundName(sem.semester,s.id) as fundname, fSumRegisMoney(sem.semester,s.id) as sumRegisMoney ,fSumAccMoney(sem.semester,s.id) as sumAccMoney,fCountPaymentBillPeriod(s.id,sem.semester) as plan,fCountPaymentUpload(s.id,sem.semester) as paid,fCountPaymentActUpload(s.id,concat(substring(sem.semester,1,2),'1')) as actUpload from login_web s,semester sem where sem.regis_status='Y' and s.classroom=? and s.admiss_year=? and s.status in (select id from status where used_status='Y') order by gpa asc;", class, year)
 	if err != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", username, err)
+		log.Printf("Error: teacher-GetMemberClassForTeacherServer 2 - query error to get student data for %s - %v\n", username, err)
 		return
 	}
 	defer rows.Close()
@@ -318,7 +318,7 @@ func GetClassForTeacherServer(username string, serverIDx string) (output []Class
 	dbname := GetStudentDBNameFromID(serverIDx)
 	db, err := dbs.OpenDB(dbname)
 	if err != nil {
-		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", username, err)
+		log.Printf("Error: teacher-GetClassForTeacherServer 1 - cannot connect to MySQL for %s - %v\n", username, err)
 		return
 	}
 	log.Printf("Log: Connect to MySQL for %s\n", username)
@@ -326,7 +326,7 @@ func GetClassForTeacherServer(username string, serverIDx string) (output []Class
 
 	rows, err := db.Query("select classroom,admiss_year,fClassNameNew(advs.student) as classname,count(advs.student) as cntStd from advisor_student advs,login_web s,instructorLogin i where advs.advisor=i.instructor and advs.student=s.id and i.esearch=? and i.loginstatus='epassport' and s.status in (select id from status where in_status='Y') group by classroom,admiss_year;", username)
 	if err != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", username, err)
+		log.Printf("Error: teacher-GetClassForTeacherServer 2 - query error to get student data for %s - %v\n", username, err)
 		return
 	}
 	defer rows.Close()

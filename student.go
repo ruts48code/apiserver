@@ -190,7 +190,7 @@ func StudentProcessAllData(ctx *fiber.Ctx) error {
 		datasummary := ProcessStudentSummary(ProcessStudentByCourse(GetAllStudentData()))
 		data, err := json.Marshal(datasummary)
 		if err != nil {
-			log.Printf("Error: %v\n", err)
+			log.Printf("Error: student-StudentProcessAllData - json api error - %v\n", err)
 			return ctx.JSON(fiber.Map{
 				"status": "json",
 			})
@@ -244,17 +244,15 @@ func GetStudentRegis(id string) (output StudentRegisStructOutput) {
 	dbname := GetStudentDBNameFromID(string(idx[0]))
 	db, err := dbs.OpenDB(dbname)
 	if err != nil {
-		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", idx, err)
+		log.Printf("Error: student-GetStudentRegis 1 - Cannot connect to MySQL for %s - %v\n", idx, err)
 		output.Status = "databaseconnect"
 		return output
-	} else {
-		log.Printf("Log: Connect to MySQL for %s\n", idx)
 	}
 	defer db.Close()
 
 	rows, err := db.Query("select r.semester,sem.semestertext,sem.semestertext2,r.student,r.course as courseid,c.tname as coursename,c.th_cr,c.lb_cr,r.section,r.status as courseStatus,fInstructorName(cfl.instructor) as teacherName,r.advisorok,o.uploadDate as advisorDate,o.majorok,o.majorDate,fInstructorName(m.head) as majorname,o.officeok,o.officeDate,f.officer_user,o.vice_deanok,o.vice_deanDate,fInstructorName(f.vice_dean) as vice_deanname,o.deanok,o.deanDate,fInstructorName(f.dean) as deanname,o.vice_campusok,o.vice_campusDate,fInstructorName(cp.vice_campus) as vice_campusname from basketregis r,basketregisok o,semester sem,course c,course_offer_limit cfl,login_web s,advisor_classroom adv,majorregis m,department d,facultyofcourse f,campus cp where r.student=o.student and r.semester=o.semester and r.semester=sem.semester and r.course=c.id and r.semester=cfl.semester and r.course=cfl.course and r.section=cfl.section and r.student=s.id and s.classroom=adv.classroom and s.admiss_year=adv.admiss_year and adv.majorregis=m.id and m.depid=d.id and d.faculty=f.id and sem.regis_status='Y' and r.student=?;", idx)
 	if err != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", idx, err)
+		log.Printf("Error: student-GetStudentRegis 2 - query error to get student data for %s - %v\n", idx, err)
 		output.Status = "databasequery"
 		return output
 	}
@@ -278,7 +276,7 @@ func GetStudentRegis(id string) (output StudentRegisStructOutput) {
 
 	rows2, err2 := db.Query("select b.course,c.tname as coursename,b.section,'วิชาในสาขา' as coursetype,b.dateUpdate,b.timeUpdate,r.status as courseStatus,b.instructorok,cfl.instructor,fInstructorName(cfl.instructor) as instructorname,b.advisorok,'อาจารย์ที่ปรึกษา' as advisor,b.majorok,m.head as mhead,fInstructorName(m.head) as mheadname,m.tname as majorname,b.departmentok,d.head as dhead,fInstructorName(d.head) as dheadname,d.tname as departmentname from basketwithdraw b,course_offer_limit cfl,course c,instrfac i,majorregis m,department d,basketregis r where b.semester=cfl.semester and b.course=cfl.course and b.section=cfl.section and b.course=c.id and b.student=r.student and b.semester=r.semester and b.course=r.course and b.section=r.section and fAdvisorMain(b.student)=i.instructor and i.majorid=m.id and m.depid=d.id and c.coursetype <> 1 and b.semester in (select semester from semester where regis_status='Y') and b.student=? UNION select b.course,c.tname as coursename,b.section,'วิชาศึกษาทั่วไป' as coursetype,b.dateUpdate,b.timeUpdate,r.status as courseStatus,b.instructorok,cfl.instructor,fInstructorName(cfl.instructor) as instructorname,b.advisorok,'อาจารย์ที่ปรึกษา' as advisor,b.majorok,m.head as mhead,fInstructorName(m.head) as mheadname,m.tname as majorname,b.departmentok,d.head as dhead,fInstructorName(d.head) as dheadname,d.tname as departmentname from basketwithdraw b,course_offer_limit cfl,course c,instrfac i,majorregis m,department d,basketregis r where b.semester=cfl.semester and b.course=cfl.course and b.section=cfl.section and b.course=c.id and b.student=r.student and b.semester=r.semester and b.course=r.course and b.section=r.section and cfl.instructor=i.instructor and i.majorid=m.id and m.depid=d.id and c.coursetype=1 and b.semester in (select semester from semester where regis_status='Y') and b.student=?;", idx, idx)
 	if err2 != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", idx, err)
+		log.Printf("Error: student-GetStudentRegis 3 - query error to get student data for %s - %v\n", idx, err)
 		output.Status = "databasequery"
 		return output
 	}
@@ -305,16 +303,15 @@ func GetStudentGrade(id string) (output StudentGradeStructOutput) {
 	dbname := GetStudentDBNameFromID(string(idx[0]))
 	db, err := dbs.OpenDB(dbname)
 	if err != nil {
-		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", idx, err)
+		log.Printf("Error: student-GetStudentGrade 1 - Cannot connect to MySQL for %s - %v\n", idx, err)
 		output.Status = "databaseconnect"
 		return output
 	}
-	log.Printf("Log: Connect to MySQL for %s\n", idx)
 	defer db.Close()
 
 	rows, err := db.Query("select t.student,sem.semester,sem.semestertext,sem.semestertext2,g.regis_cr,g.earn_cr,g.gps,g.all_regis_cr,g.all_earn_cr,g.gpa,p.status as proStatus,fStatusName(p.status) as proStatusName,fStudentStatus(t.student) as std_status,fStatusName(fStudentStatus(t.student)) as std_statusName,c.id as courseid,c.tname as coursename,c.th_cr,c.lb_cr,t.grade from transcript t,gpa g,semester sem,course c,pro_status p where t.student=g.student and t.semester=g.semester and g.semester=sem.semester and t.course=c.id and g.student=p.student and g.semester=p.semester and t.student=? order by sem.semester;", idx)
 	if err != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", idx, err)
+		log.Printf("Error: student-GetStudentGrade 2 - query error to get student data for %s - %v\n", idx, err)
 		output.Status = "databasequery"
 		return output
 	}
@@ -377,9 +374,7 @@ func getStudentDB(username string) (db *dbs.DB4ruts, err error) {
 	dbname := GetStudentDBNameFromID(string(username[1]))
 	db, err = dbs.OpenDB(dbname)
 	if err != nil {
-		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", username, err)
-	} else {
-		log.Printf("Log: Connect to MySQL for %s\n", username)
+		log.Printf("Error: student-getStudentDB - Cannot connect to MySQL for %s - %v\n", username, err)
 	}
 	return
 }
@@ -387,14 +382,14 @@ func getStudentDB(username string) (db *dbs.DB4ruts, err error) {
 func getDataStudent(username string, token bool) (output UserStruct) {
 	db, err := getStudentDB(username)
 	if err != nil {
-		log.Printf("Error: Get data student for %s - %v\n", username, err)
+		log.Printf("Error: student-getDataStudent 1 - error to get studentDB for %s - %v\n", username, err)
 		return
 	}
 	defer db.Close()
 
 	rows, err := db.Query("select s.citizen as citizen, s.tfirst as tfirst, s.tlast as tlast, f.id as faculty_id, f.tname as faculty_name, d.id as department_id, d.tname as department_name, m.id as major_id, m.tname as major_name, n.id as minor_id, n.tname as minor_name, fStudentEmail(s.id) as email, fStudentEmailUser(s.id) as emailUser from login_web s,advisor_classroom adv,minorregis n,majorregis m,department d,facultyofcourse f where s.classroom=adv.classroom and s.admiss_year=adv.admiss_year and adv.majorregis=m.id and adv.minorregis=n.id and m.depid=d.id and d.faculty=f.id and s.id=? limit 1;", username[1:])
 	if err != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", username, err)
+		log.Printf("Error: student-getDataStudent 2 - query error to get student data for %s - %v\n", username, err)
 		return
 	}
 	defer rows.Close()
@@ -431,15 +426,14 @@ func GetStudentSupervisor(id string) (output []SupervisorForStudentStruct) {
 	dbname := GetStudentDBNameFromID(string(id[0]))
 	db, err := dbs.OpenDB(dbname)
 	if err != nil {
-		log.Printf("Error: Cannot connect to MySQL for %s - %v\n", id, err)
+		log.Printf("Error: student-GetStudentSupervisor 1 - cannot connect to MySQL for %s - %v\n", id, err)
 		return
 	}
-	log.Printf("Log: Connect to MySQL for %s\n", id)
 	defer db.Close()
 
 	rows, err := db.Query("select fInstructorName(a.advisor) as advisorName,priority,l.esearch,l.loginstatus from advisor_student a,instructorLogin l where a.advisor=l.instructor and a.student=?;", id)
 	if err != nil {
-		log.Printf("Error: Query get data student for %s - %v\n", id, err)
+		log.Printf("Error: student-GetStudentSupervisor 2 - query error to get student data for %s - %v\n", id, err)
 		return
 	}
 	defer rows.Close()
@@ -474,15 +468,14 @@ func GetSupervisorFromServer(server string) (output []SupervisorDataStruct) {
 	output = make([]SupervisorDataStruct, 0)
 	db, err := dbs.OpenDB(server)
 	if err != nil {
-		log.Printf("Error: Cannot connect to SiS MySQL %s - %v\n", server, err)
+		log.Printf("Error: student-GetSupervisorFromServer 1 - cannot connect to SiS MySQL %s - %v\n", server, err)
 		return
 	}
-	log.Printf("Log: Connect to SiS MySQL %s\n", server)
 	defer db.Close()
 
 	rows, err := db.Query("select fInstructorName(a.advisor),i.esearch,f.tname as facultyname from login_web s,advisor_student a,instructorLogin i,instrfac t,majorregis m,department d,facultyofcourse f where s.id=a.student and a.advisor=i.instructor and a.advisor=t.instructor and t.majorid=m.id and m.depid=d.id and d.faculty=f.id and a.priority='M' and i.loginstatus='epassport' and s.status in (select id from status where in_status='Y') and s.admiss_year <= (select academicyear from campus) group by a.advisor,i.esearch,f.tname")
 	if err != nil {
-		log.Printf("Error: Query get supervisor from server %s - %v\n", server, err)
+		log.Printf("Error: student-GetSupervisorFromServer 2 - query error to get supervisor from server %s - %v\n", server, err)
 		return
 	}
 	defer rows.Close()

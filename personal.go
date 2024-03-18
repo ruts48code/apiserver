@@ -83,6 +83,7 @@ func PersonalAcademicPrivilege(ctx *fiber.Ctx) error {
 		body := UserPersonalRequestStruct{}
 		err := json.Unmarshal(ctx.Body(), &body)
 		if err != nil {
+			log.Printf("Error: personal-PersonalAcademicPrivilege - json api error\n")
 			return ctx.JSON(fiber.Map{
 				"status": "json",
 			})
@@ -101,6 +102,7 @@ func PersonalAcademicPrivilege(ctx *fiber.Ctx) error {
 			}
 		}
 		if !privilege {
+			log.Printf("Log: personal-PersonalAcademicPrivilege - permission error\n")
 			output.Status = "permission"
 			return ctx.JSON(output)
 		}
@@ -130,7 +132,7 @@ func getAcademicInfo(username string) (output UserAcademicInfoArrayStruct) {
 	output.Status = "ok"
 	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
-		log.Printf("Error: Get academic info databse for %s - %v\n", username, err)
+		log.Printf("Error: personal-getAcademicInfo 1 - Get academic info databse for %s - %v\n", username, err)
 		output.Status = "database"
 		return
 	}
@@ -138,7 +140,7 @@ func getAcademicInfo(username string) (output UserAcademicInfoArrayStruct) {
 
 	rows, err := db.Query("SELECT CITIZEN_ID,PREFIX_NAME,STF_FNAME,STF_LNAME,STF_FNAME_EN,STF_LNAME_EN,POSITION_TNAME,CAMPUS_CODE,CAMPUS_TNAME,FACULTY_CODE,FacName,DEPARTMENT_CODE,DepName,SECTION_CODE,SECTION_TNAME,UOC_STAFF_EMAIL,GENDER_NAME,HGRAD_OUTDATE,GRAD_LEV_TNAME,HGRAD_DEGREE,PROGRAM_NAME,HGRAD_UNIV,NATION_TNAME,NATION_ENAME FROM vRISS WHERE USERNAME_CISCO=?;", username)
 	if err != nil {
-		log.Printf("Error: Query get academic info for %s - %v\n", username, err)
+		log.Printf("Error: personal-getAcademicInfo 2 - Query get academic info for %s - %v\n", username, err)
 		output.Status = "database"
 		return
 	}
@@ -176,14 +178,14 @@ func pcode() (output PersonalCodeStruct) {
 func getDataString(data string) (output []string) {
 	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: personal-getDataString 1 - connect database error - %v\n", err)
 		return
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT DISTINCT " + data + " FROM vRISS;")
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: personal-getDataString 2 - query error - %v\n", err)
 		return
 	}
 	defer rows.Close()
@@ -199,14 +201,14 @@ func getDataString(data string) (output []string) {
 func getPairDataString(data1 string, data2 string) (output []CodeStruct) {
 	db, err := dbs.OpenDB(conf.Personal.Server)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: personal-getPairDataString 1 - connect database error - %v\n", err)
 		return
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT DISTINCT " + data1 + "," + data2 + " FROM vRISS;")
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: personal-getPairDataString 1 - query error - %v\n", err)
 		return
 	}
 	defer rows.Close()

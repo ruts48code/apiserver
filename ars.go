@@ -175,7 +175,7 @@ func (d *ArsStdObj) processData() {
 		d.updateData(db)
 		db.Close()
 	default:
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: ars-processdata - %v\n", err)
 	}
 }
 
@@ -199,7 +199,7 @@ func (d *ArsStdObj) getCampus(db *dbs.DB4ruts) []ArsCampus {
 	query := "SELECT id, tname FROM campus"
 	rows, err := db.Query(query)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: ars-getCampus - %v\n", err)
 		return campus
 	}
 	defer rows.Close()
@@ -223,7 +223,7 @@ func (d *ArsStdObj) getFaculty(db *dbs.DB4ruts) []ArsFaculty {
 	query := "SELECT id, tname, campusid FROM ref_faculty"
 	rows, err := db.Query(query)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: ars-getFaculty - %v\n", err)
 		return faculty
 	}
 	defer rows.Close()
@@ -251,7 +251,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 	querysection := "SELECT id, tname FROM section"
 	rowssection, errsection := db.Query(querysection)
 	if errsection != nil {
-		log.Printf("Error: %v\n", errsection)
+		log.Printf("Error: ars-getProgram 1 - %v\n", errsection)
 		return program
 	}
 
@@ -267,7 +267,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 	queryperiod := "SELECT id, tname FROM period"
 	rowsperiod, errperiod := db.Query(queryperiod)
 	if errperiod != nil {
-		log.Printf("Error: %v\n", errperiod)
+		log.Printf("Error: ars-getProgram 2 - %v\n", errperiod)
 		return program
 	}
 
@@ -275,7 +275,6 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 		id := ""
 		name := ""
 		rowsperiod.Scan(&id, &name)
-		//period[id] = name
 		period[id] = ArsPeriodName(id)
 	}
 	rowsperiod.Close()
@@ -283,7 +282,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 	query := "SELECT program_id, program_name_th, faculty_id, major_name_th FROM mainprogram"
 	rows, err := db.Query(query)
 	if err != nil {
-		log.Printf("Error: %v\n", err)
+		log.Printf("Error: ars-getProgram 3 - %v\n", err)
 		return program
 	}
 	defer rows.Close()
@@ -303,7 +302,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 		queryplan := "SELECT total, period, section FROM totalplan WHERE programid like ?"
 		rowsplan, errplan := db.Query(queryplan, program_id)
 		if errplan != nil {
-			log.Printf("Error: %v\n", errplan)
+			log.Printf("Error: ars-getProgram 4 - %v\n", errplan)
 			return program
 		}
 		defer rowsplan.Close()
@@ -321,7 +320,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 			query2 := "SELECT distinct id FROM program WHERE programid like ? and period like ? and section like ?"
 			rows2, err2 := db.Query(query2, program_id, periodplan, sectionplan)
 			if err2 != nil {
-				log.Printf("Error: %v\n", err2)
+				log.Printf("Error: ars-getProgram 5 - %v\n", err2)
 				return program
 			}
 
@@ -351,7 +350,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryx1 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and payment like 'Y'"
 				rowsx1, errx1 := db.Query(queryx1, programadm[i])
 				if errx1 != nil {
-					log.Printf("Error: %v\n", errx1)
+					log.Printf("Error: ars-getProgram 6 - %v\n", errx1)
 					return program
 				}
 
@@ -368,7 +367,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryz1 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and roundid like '9' and payment like 'Y'"
 				rowsz1, errz1 := db.Query(queryz1, programadm[i])
 				if errz1 != nil {
-					log.Printf("Error: %v\n", errz1)
+					log.Printf("Error: ars-getProgram 7 - %v\n", errz1)
 					return program
 				}
 
@@ -385,7 +384,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryt1 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and (roundid like '6' or roundid like '7' or roundid like '8') and payment like 'Y'"
 				rowst1, errt1 := db.Query(queryt1, programadm[i])
 				if errt1 != nil {
-					log.Printf("Error: %v\n", errt1)
+					log.Printf("Error: ars-getProgram 8 - %v\n", errt1)
 					return program
 				}
 
@@ -402,7 +401,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryc1 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and (roundid like '1' or roundid like '2' or roundid like '3' or roundid like '4') and payment like 'Y'"
 				rowsc1, errc1 := db.Query(queryc1, programadm[i])
 				if errc1 != nil {
-					log.Printf("Error: %v\n", errc1)
+					log.Printf("Error: ars-getProgram 9 - %v\n", errc1)
 					return program
 				}
 
@@ -419,7 +418,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryx2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and payment like 'Y'"
 				rowsx2, errx2 := db.Query(queryx2, programadm[i])
 				if errx2 != nil {
-					log.Printf("Error: %v\n", errx2)
+					log.Printf("Error: ars-getProgram 10 - %v\n", errx2)
 					return program
 				}
 
@@ -436,7 +435,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryz2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and roundid like '9' and payment like 'Y'"
 				rowsz2, errz2 := db.Query(queryz2, programadm[i])
 				if errz2 != nil {
-					log.Printf("Error: %v\n", errz2)
+					log.Printf("Error: ars-getProgram 11 - %v\n", errz2)
 					return program
 				}
 
@@ -453,7 +452,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryt2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and (roundid like '6' or roundid like '7' or roundid like '8') and payment like 'Y'"
 				rowst2, errt2 := db.Query(queryt2, programadm[i])
 				if errt2 != nil {
-					log.Printf("Error: %v\n", errt2)
+					log.Printf("Error: ars-getProgram 12 - %v\n", errt2)
 					return program
 				}
 
@@ -470,7 +469,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryc2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and (roundid like '1' or roundid like '2' or roundid like '3' or roundid like '4') and payment like 'Y'"
 				rowsc2, errc2 := db.Query(queryc2, programadm[i])
 				if errc2 != nil {
-					log.Printf("Error: %v\n", errc2)
+					log.Printf("Error: ars-getProgram 13 - %v\n", errc2)
 					return program
 				}
 
@@ -487,7 +486,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryx3 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and report like 'Y' and payment like 'Y'"
 				rowsx3, errx3 := db.Query(queryx3, programadm[i])
 				if errx3 != nil {
-					log.Printf("Error: %v\n", errx3)
+					log.Printf("Error: ars-getProgram 14 - %v\n", errx3)
 					return program
 				}
 
@@ -504,7 +503,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryz3 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and report like 'Y' and roundid like '9' and payment like 'Y'"
 				rowsz3, errz3 := db.Query(queryz3, programadm[i])
 				if errz3 != nil {
-					log.Printf("Error: %v\n", errz3)
+					log.Printf("Error: ars-getProgram 15 - %v\n", errz3)
 					return program
 				}
 
@@ -521,7 +520,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryt3 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and report like 'Y' and (roundid like '6' or roundid like '7' or roundid like '8') and payment like 'Y'"
 				rowst3, errt3 := db.Query(queryt3, programadm[i])
 				if errt3 != nil {
-					log.Printf("Error: %v\n", errt3)
+					log.Printf("Error: ars-getProgram 16 - %v\n", errt3)
 					return program
 				}
 
@@ -538,7 +537,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				queryc3 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and report like 'Y' and (roundid like '1' or roundid like '2' or roundid like '3' or roundid like '4') and payment like 'Y'"
 				rowsc3, errc3 := db.Query(queryc3, programadm[i])
 				if errc3 != nil {
-					log.Printf("Error: %v\n", errc3)
+					log.Printf("Error: ars-getProgram 17 - %v\n", errc3)
 					return program
 				}
 
@@ -796,7 +795,7 @@ func ArsProcess(ctx *fiber.Ctx) error {
 		data.processData()
 		jdata, err := json.Marshal(data)
 		if err != nil {
-			log.Printf("Error: %v\n", err)
+			log.Printf("Error: ars-ArsProcess - %v\n", err)
 			return ctx.JSON(fiber.Map{
 				"status": "json",
 			})
