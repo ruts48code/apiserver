@@ -211,7 +211,7 @@ func getDataStaff(username string, token bool) (output UserStruct) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT STF_FNAME, STF_LNAME, FACULTY_CODE, FacName, department_code, depname, section_code, section_tname, CITIZEN_ID FROM vUOC_STAFF_L01 WHERE USERNAME_CISCO=? limit 1;", username)
+	rows, err := db.Query("SELECT STF_FNAME, STF_LNAME, FACULTY_CODE, FacName, department_code, depname, section_code, section_tname, CITIZEN_ID FROM vUOC_STAFF_L01 WHERE USERNAME_CISCO=?", username)
 	if err != nil {
 		log.Printf("Error: Query data staff for %s - %v\n", username, err)
 		return
@@ -225,9 +225,10 @@ func getDataStaff(username string, token bool) (output UserStruct) {
 		output.Name = output.FirstName + " " + output.LastName
 		output.Type = utils.CheckEpassportType(username)
 		output.Email = username + "@rmutsv.ac.th"
+		break
 	}
 
-	rows2, err2 := db.Query("SELECT CHIEF_CODE, CHIEF_NAME, FACULTY_CODE, Facname from vADMIN WHERE USERNAME_CISCO=? limit 1;", username)
+	rows2, err2 := db.Query("SELECT CHIEF_CODE, CHIEF_NAME, FACULTY_CODE, Facname from vADMIN WHERE USERNAME_CISCO=?;", username)
 	if err2 != nil {
 		log.Printf("Error: Query data staff admin for %s - %v\n", username, err)
 		return
@@ -236,6 +237,7 @@ func getDataStaff(username string, token bool) (output UserStruct) {
 
 	for rows2.Next() {
 		rows2.Scan(&output.ChiefCode, &output.ChiefName, &output.ChiefFacCode, &output.ChiefFacName)
+		break
 	}
 	if token {
 		output.Token = getToken(username, output)
