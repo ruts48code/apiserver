@@ -36,10 +36,12 @@ func SaveCache(domain string, data string) {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("Insert into cache (domain,data,timestamp) values (?,?,?);", domain, data, utils.GetTimeStamp(time.Now()))
+	ts := utils.GetTimeStamp(time.Now())
+	_, err = db.Exec("Insert into cache (domain,data,timestamp) values (?,?,?);", domain, data, ts)
 	if err != nil {
 		log.Printf("Error: utils-SaveCache 2 - cannot write cache domain %s : %v\n", domain, err)
 	}
+	log.Printf("Save Cache Domain = %s - Timestamp = %s\n", domain, ts)
 }
 
 func CleanCache(domain string) {
@@ -61,8 +63,9 @@ func CleanCache(domain string) {
 	for rows.Next() {
 		rows.Scan(&t)
 	}
-	log.Printf("Domain = %s - Timestamp = %s\n", domain, utils.GetTimeStamp(t))
-	_, err = db.Exec("delete from cache where domain=? and timestamp < ?", domain, utils.GetTimeStamp(t))
+	ts := utils.GetTimeStamp(t)
+	log.Printf("Clean Cache Domain = %s - Timestamp = %s\n", domain, ts)
+	_, err = db.Exec("delete from cache where domain=? and timestamp < ?", domain, ts)
 	if err != nil {
 		log.Printf("Error: utils-CleanCache 3 - cannot delete cache domain %s : %v\n", domain, err)
 	}
@@ -86,5 +89,6 @@ func ReadCache(domain string) (output string) {
 	for rows.Next() {
 		rows.Scan(&output)
 	}
+	log.Printf("Read Cache Domain = %s\n", domain)
 	return
 }
