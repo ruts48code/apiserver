@@ -415,7 +415,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				rowsc1.Close()
 
 				count = 0
-				queryx2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and payment like 'Y'"
+				queryx2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and payment like 'Y' and clearingstatus='Y'"
 				rowsx2, errx2 := db.Query(queryx2, programadm[i])
 				if errx2 != nil {
 					log.Printf("Error: ars-getProgram 10 - %v\n", errx2)
@@ -432,7 +432,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				rowsx2.Close()
 
 				count = 0
-				queryz2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and roundid like '9' and payment like 'Y'"
+				queryz2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and roundid like '9' and payment like 'Y' and clearingstatus='Y'"
 				rowsz2, errz2 := db.Query(queryz2, programadm[i])
 				if errz2 != nil {
 					log.Printf("Error: ars-getProgram 11 - %v\n", errz2)
@@ -449,7 +449,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				rowsz2.Close()
 
 				count = 0
-				queryt2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and (roundid like '6' or roundid like '7' or roundid like '8') and payment like 'Y'"
+				queryt2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and (roundid like '6' or roundid like '7' or roundid like '8') and payment like 'Y' and clearingstatus='Y'"
 				rowst2, errt2 := db.Query(queryt2, programadm[i])
 				if errt2 != nil {
 					log.Printf("Error: ars-getProgram 12 - %v\n", errt2)
@@ -466,7 +466,7 @@ func (d *ArsStdObj) getProgram(db *dbs.DB4ruts) []ArsProgram {
 				rowst2.Close()
 
 				count = 0
-				queryc2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and (roundid like '1' or roundid like '2' or roundid like '3' or roundid like '4') and payment like 'Y'"
+				queryc2 := "SELECT count(*) FROM applicant_apply WHERE applyprogramid like ? and confirm like 'Y' and (roundid like '1' or roundid like '2' or roundid like '3' or roundid like '4') and payment like 'Y' and clearingstatus='Y'"
 				rowsc2, errc2 := db.Query(queryc2, programadm[i])
 				if errc2 != nil {
 					log.Printf("Error: ars-getProgram 13 - %v\n", errc2)
