@@ -41,7 +41,6 @@ func SaveCache(domain string, data string) {
 	if err != nil {
 		log.Printf("Error: utils-SaveCache 2 - cannot write cache domain %s : %v\n", domain, err)
 	}
-	log.Printf("Save Cache Domain = %s - Timestamp = %s\n", domain, ts)
 }
 
 func CleanCache(domain string) {
@@ -64,7 +63,6 @@ func CleanCache(domain string) {
 		rows.Scan(&t)
 	}
 	ts := utils.GetTimeStamp(t)
-	log.Printf("Clean Cache Domain = %s - Timestamp = %s\n", domain, ts)
 	_, err = db.Exec("delete from cache where domain=? and timestamp < ?", domain, ts)
 	if err != nil {
 		log.Printf("Error: utils-CleanCache 3 - cannot delete cache domain %s : %v\n", domain, err)
@@ -89,6 +87,5 @@ func ReadCache(domain string) (output string) {
 	for rows.Next() {
 		rows.Scan(&output)
 	}
-	log.Printf("Read Cache Domain = %s\n", domain)
 	return
 }
