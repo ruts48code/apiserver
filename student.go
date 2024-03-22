@@ -545,10 +545,7 @@ func ProcessStudentByCourse(data []SupervisorDataStruct) (output map[string]Stud
 			for k := range data[i].Class[j].Trace.StudentStatus {
 				if data[i].Class[j].Trace.StudentStatus[k].StatusName == "" {
 					log.Printf("course:%s id:%s fac:%s key:%s status:%s\n", coursename, data[i].Epassport, data[i].FacultyName, data[i].Class[j].Trace.StudentStatus[k].Status, data[i].Class[j].Trace.StudentStatus[k].StatusName)
-				}
-				for ll := range data[i].Class[j].Trace.StudentStatus[k].Members {
-					log.Printf("StdID: %s\n", data[i].Class[j].Trace.StudentStatus[k].Members[ll].ID)
-					break
+					log.Printf("StdID: %s\n", data[i].Class[j].Trace.StudentStatus[k].Members[0].ID)
 				}
 				statusStudent := sumStudent.StudentStatus[data[i].Class[j].Trace.StudentStatus[k].StatusName]
 				statusStudent += data[i].Class[j].Trace.StudentStatus[k].Count
