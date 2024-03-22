@@ -104,7 +104,7 @@ func elogin(ctx *fiber.Ctx) error {
 
 	if username == "" || password == "" {
 		return ctx.JSON(UserStruct{
-			Status: "passowrd",
+			Status: "password",
 		})
 	}
 
