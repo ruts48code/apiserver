@@ -548,6 +548,7 @@ func ProcessStudentByCourse(data []SupervisorDataStruct) (output map[string]Stud
 				}
 				for ll := range data[i].Class[j].Trace.StudentStatus[k].Members {
 					log.Printf("StdID: %s\n", data[i].Class[j].Trace.StudentStatus[k].Members[ll].ID)
+					break
 				}
 				statusStudent := sumStudent.StudentStatus[data[i].Class[j].Trace.StudentStatus[k].StatusName]
 				statusStudent += data[i].Class[j].Trace.StudentStatus[k].Count
