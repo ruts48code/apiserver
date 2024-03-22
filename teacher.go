@@ -265,7 +265,6 @@ func GetMemberClassForTeacherServer(username string, classid string, serverIDx s
 		log.Printf("Error: teacher-GetMemberClassForTeacherServer 1 - cannot connect to MySQL for %s - %v\n", username, err)
 		return
 	}
-	log.Printf("Log: Connect to MySQL for %s\n", username)
 	defer db.Close()
 
 	class, year := ExtractClassID(classid)
@@ -321,7 +320,6 @@ func GetClassForTeacherServer(username string, serverIDx string) (output []Class
 		log.Printf("Error: teacher-GetClassForTeacherServer 1 - cannot connect to MySQL for %s - %v\n", username, err)
 		return
 	}
-	log.Printf("Log: Connect to MySQL for %s\n", username)
 	defer db.Close()
 
 	rows, err := db.Query("select classroom,admiss_year,fClassNameNew(advs.student) as classname,count(advs.student) as cntStd from advisor_student advs,login_web s,instructorLogin i where advs.advisor=i.instructor and advs.student=s.id and i.esearch=? and i.loginstatus='epassport' and s.status in (select id from status where in_status='Y') group by classroom,admiss_year;", username)
