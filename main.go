@@ -70,6 +70,7 @@ func main() {
 	app.Get("/ars/faculty/:facid", ArsFacExport)
 	app.Get("/ars/process/:otp", ArsProcess)
 	app.Get("/ars/clean/:otp", ArsClean)
+	app.Get("/ars/table", ArsTable)
 
 	app.Post("/mcas/mail/:token", SendMail)
 

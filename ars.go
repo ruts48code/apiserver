@@ -824,3 +824,10 @@ func ArsClean(ctx *fiber.Ctx) error {
 		})
 	}
 }
+
+func ArsTable(ctx *fiber.Ctx) error {
+	stdobjdata := ArsReadFromDB()
+	return ctx.Render("table", fiber.Map{
+		"Data": stdobjdata,
+	})
+}

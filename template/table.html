@@ -1,0 +1,171 @@
+<html>
+    <head>
+        <title>Student Report</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+            html, body {
+                font-family: 'Kodchasan', sans-serif;
+                font-weight: 400;
+                font-size: 16px;
+                color: black;
+                background-color: #ece8de;
+            }
+            h1,h2,h3,h4,h5,h6 {
+                font-family: 'Kodchasan', sans-serif;
+                color: #6a4205;
+            }
+            table {
+                border: 1px solid black;
+            }
+            th{
+                font-weight: 800;
+                text-align: left;
+                padding: 15px;
+                background-color: #c99444;
+                color: white;
+            }
+            td {
+                padding: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        {{$campus := .Data.Campus}}
+        {{$facultys := .Data.Faculty}}
+        {{$programs := .Data.Program}}
+        <h3>ภาพรวมวิทยาเขต</h3>
+        <table>
+            <tr>
+                <th>วิทยาเขต</th>
+                <th>แผนรับ</th>
+                <th>ผู้สมัคร<br />(โควตาพิเศษ)</th>
+                <th>ผู้สมัคร<br />(ปวช/ปวส)</th>
+                <th>ผู้สมัคร<br />(TCAS)</th>
+                <th>ผู้สมัคร<br />(ทั้งหมด)</th>
+                <th>ยืนยัน<br />(โควตาพิเศษ)</th>
+                <th>ยืนยัน<br />(ปวช/ปวส)</th>
+                <th>ยืนยัน<br />(TCAS)</th>
+                <th>ยืนยัน<br />(ทั้งหมด)</th>
+                <th>รายงานตัว<br />(โควตาพิเศษ)</th>
+                <th>รายงานตัว<br />(ปวช/ปวส)</th>
+                <th>รายงานตัว<br />(TCAS)</th>
+                <th>รายงานตัว<br />(ทั้งหมด)</th>
+            </tr>
+            {{range .Data.Campus}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Plan}}</td>
+                <td>{{.ApplicantQP}}</td>
+                <td>{{.ApplicantTech}}</td>
+                <td>{{.ApplicantTCAS}}</td>
+                <td>{{.Applicant}}</td>
+                <td>{{.ConfirmQP}}</td>
+                <td>{{.ConfirmTech}}</td>
+                <td>{{.ConfirmTCAS}}</td>
+                <td>{{.Confirm}}</td>
+                <td>{{.ReportQP}}</td>
+                <td>{{.ReportTech}}</td>
+                <td>{{.ReportTCAS}}</td>
+                <td>{{.Report}}</td>
+            </tr>
+            {{end}}
+        </table>
+
+        <h3>ภาพรวมคณะ</h3>
+        <table>
+            <tr>
+                <th>คณะ</th>
+                <th>แผนรับ</th>
+                <th>ผู้สมัคร<br />(โควตาพิเศษ)</th>
+                <th>ผู้สมัคร<br />(ปวช/ปวส)</th>
+                <th>ผู้สมัคร<br />(TCAS)</th>
+                <th>ผู้สมัคร<br />(ทั้งหมด)</th>
+                <th>ยืนยัน<br />(โควตาพิเศษ)</th>
+                <th>ยืนยัน<br />(ปวช/ปวส)</th>
+                <th>ยืนยัน<br />(TCAS)</th>
+                <th>ยืนยัน<br />(ทั้งหมด)</th>
+                <th>รายงานตัว<br />(โควตาพิเศษ)</th>
+                <th>รายงานตัว<br />(ปวช/ปวส)</th>
+                <th>รายงานตัว<br />(TCAS)</th>
+                <th>รายงานตัว<br />(ทั้งหมด)</th>
+            </tr>
+            {{range .Data.Faculty}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Plan}}</td>
+                <td>{{.ApplicantQP}}</td>
+                <td>{{.ApplicantTech}}</td>
+                <td>{{.ApplicantTCAS}}</td>
+                <td>{{.Applicant}}</td>
+                <td>{{.ConfirmQP}}</td>
+                <td>{{.ConfirmTech}}</td>
+                <td>{{.ConfirmTCAS}}</td>
+                <td>{{.Confirm}}</td>
+                <td>{{.ReportQP}}</td>
+                <td>{{.ReportTech}}</td>
+                <td>{{.ReportTCAS}}</td>
+                <td>{{.Report}}</td>
+            </tr>
+            {{end}}
+        </table>
+
+        <h3>ภาพรวมหลักสูตร</h3>
+        <table>
+        {{range $faculty := $facultys}}
+            <tr style="background-color: #6a4205;color: white;">
+                <td>{{$faculty.Name}}</td>
+                <td>{{$faculty.Plan}}</td>
+                <td>{{$faculty.ApplicantQP}}</td>
+                <td>{{$faculty.ApplicantTech}}</td>
+                <td>{{$faculty.ApplicantTCAS}}</td>
+                <td>{{$faculty.Applicant}}</td>
+                <td>{{$faculty.ConfirmQP}}</td>
+                <td>{{$faculty.ConfirmTech}}</td>
+                <td>{{$faculty.ConfirmTCAS}}</td>
+                <td>{{$faculty.Confirm}}</td>
+                <td>{{$faculty.ReportQP}}</td>
+                <td>{{$faculty.ReportTech}}</td>
+                <td>{{$faculty.ReportTCAS}}</td>
+                <td>{{$faculty.Report}}</td>
+            </tr>
+            <tr>
+                <th>หลักสูตร</th>
+                <th>แผนรับ</th>
+                <th>ผู้สมัคร<br />(โควตาพิเศษ)</th>
+                <th>ผู้สมัคร<br />(ปวช/ปวส)</th>
+                <th>ผู้สมัคร<br />(TCAS)</th>
+                <th>ผู้สมัคร<br />(ทั้งหมด)</th>
+                <th>ยืนยัน<br />(โควตาพิเศษ)</th>
+                <th>ยืนยัน<br />(ปวช/ปวส)</th>
+                <th>ยืนยัน<br />(TCAS)</th>
+                <th>ยืนยัน<br />(ทั้งหมด)</th>
+                <th>รายงานตัว<br />(โควตาพิเศษ)</th>
+                <th>รายงานตัว<br />(ปวช/ปวส)</th>
+                <th>รายงานตัว<br />(TCAS)</th>
+                <th>รายงานตัว<br />(ทั้งหมด)</th>
+            </tr>
+            {{range $program := $programs}}
+            {{if (eq $program.FacultyID $faculty.ID)}}
+            <tr>
+                <td>{{$program.Name}}</td>
+                <td>{{$program.Plan}}</td>
+                <td>{{$program.ApplicantQP}}</td>
+                <td>{{$program.ApplicantTech}}</td>
+                <td>{{$program.ApplicantTCAS}}</td>
+                <td>{{$program.Applicant}}</td>
+                <td>{{$program.ConfirmQP}}</td>
+                <td>{{$program.ConfirmTech}}</td>
+                <td>{{$program.ConfirmTCAS}}</td>
+                <td>{{$program.Confirm}}</td>
+                <td>{{$program.ReportQP}}</td>
+                <td>{{$program.ReportTech}}</td>
+                <td>{{$program.ReportTCAS}}</td>
+                <td>{{$program.Report}}</td>
+            </tr>
+            {{end}}
+            {{end}}
+            <tr><td colspan="5"></td></tr>
+        {{end}}
+        </table>
+    </body>
+</html>
