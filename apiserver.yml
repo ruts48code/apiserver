@@ -17,6 +17,7 @@ elogin:
   expire: 3600
   clean: 60
   tokensize: 64
+  limit: 10
 personal:
   server: "sqlserver://user:password@10.0.0.1/?database=dbname"
   permission:

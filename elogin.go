@@ -108,6 +108,17 @@ func elogin(ctx *fiber.Ctx) error {
 		})
 	}
 
+	numlimit := NumLimitElogin(username)
+	if numlimit > conf.Elogin.Limit {
+		log.Printf("Error: Elogin Limit for %s\n", username)
+		return ctx.JSON(fiber.Map{
+			"status": "limit",
+		})
+	}
+
+	tk := SaveLimitLogin(username)
+	defer DeleteLimitLogin(tk)
+
 	result := ChkLoginDatabase(username, password)
 	if result.Status == "ok" {
 		result.Token = getToken(username, result)

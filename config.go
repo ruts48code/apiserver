@@ -24,6 +24,7 @@ type (
 		Expire     int      `yaml:"expire"`
 		Clean      int      `yaml:"clean"`
 		TokenSize  int      `yaml:"tokensize"`
+		Limit      int      `yaml:"limit"`
 	}
 
 	PersonalStruct struct {
