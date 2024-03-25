@@ -109,7 +109,7 @@ func elogin(ctx *fiber.Ctx) error {
 	}
 
 	numlimit := NumLimitElogin(username)
-	if numlimit > conf.Elogin.Limit {
+	if numlimit > conf.Elogin.Limit || numlimit == -1 {
 		log.Printf("Error: Elogin Limit for %s\n", username)
 		return ctx.JSON(fiber.Map{
 			"status": "limit",
