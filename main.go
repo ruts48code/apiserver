@@ -11,7 +11,14 @@ import (
 )
 
 func main() {
-	utils.ProcessConfig("/etc/apiserver.yml", &conf)
+	if utils.FileExist("/etc/apiserver.hcl") {
+		utils.ProcessConfigHCL("/etc/apiserver.hcl", &conf)
+	} else if utils.FileExist("/etc/apiserver.yml") {
+		utils.ProcessConfig("/etc/apiserver.yml", &conf)
+	} else {
+		log.Printf("Error: cannot load configurationfile\n")
+		return
+	}
 	app := fiber.New(fiber.Config{
 		Views:          html.New("./template", ".html"),
 		ProxyHeader:    fiber.HeaderXForwardedFor,

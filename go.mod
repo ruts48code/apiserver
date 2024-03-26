@@ -3,14 +3,14 @@ module apiserver
 go 1.22.1
 
 require (
-	github.com/gofiber/fiber/v2 v2.52.2
+	github.com/gofiber/fiber/v2 v2.52.3
 	github.com/gofiber/template/html/v2 v2.1.1
 	github.com/mavricknz/ldap v0.0.0-20160227184754-f5a958005e43
 	github.com/ruts48code/crypt4ruts v0.0.0-20240318160143-a12eb79360fb
-	github.com/ruts48code/dbs4ruts v0.0.0-20240323054248-a5b43236f1e5
-	github.com/ruts48code/otp4ruts v0.0.0-20240323054131-3b34e41968d0
+	github.com/ruts48code/dbs4ruts v0.0.0-20240326023856-8c6681b33f08
+	github.com/ruts48code/otp4ruts v0.0.0-20240326023809-2546943f0483
 	github.com/ruts48code/random4ruts v0.0.0-20240318160157-d85939eda018
-	github.com/ruts48code/utils4ruts v0.0.0-20240323054002-060db92a232a
+	github.com/ruts48code/utils4ruts v0.0.0-20240326023658-0e67652f2a4f
 	gopkg.in/mail.v2 v2.3.1
 )
 
