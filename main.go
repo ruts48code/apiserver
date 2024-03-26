@@ -13,12 +13,15 @@ import (
 func main() {
 	if utils.FileExist("/etc/apiserver.hcl") {
 		utils.ProcessConfigHCL("/etc/apiserver.hcl", &conf)
+		log.Printf("Load /etc/apiserver.hcl sucessfully\n")
 	} else if utils.FileExist("/etc/apiserver.yml") {
 		utils.ProcessConfig("/etc/apiserver.yml", &conf)
+		log.Printf("Load /etc/apiserver.yml sucessfully\n")
 	} else {
 		log.Printf("Error: cannot load configurationfile\n")
 		return
 	}
+
 	app := fiber.New(fiber.Config{
 		Views:          html.New("./template", ".html"),
 		ProxyHeader:    fiber.HeaderXForwardedFor,
