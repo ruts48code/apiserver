@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html/v2"
 	utils "github.com/ruts48code/utils4ruts"
 )
@@ -44,12 +43,6 @@ func main() {
 			return nil
 		},
 	})
-
-	app.Use(cors.New(cors.Config{
-		AllowOriginsFunc: func(origin string) bool {
-			return true
-		},
-	}))
 
 	app.Static("/", "./static")
 	app.Get("/", index)
